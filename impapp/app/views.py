@@ -13,3 +13,6 @@ def test(request):
     newdoc.delete()
 
     return HttpResponse("Service is running")
+
+def isworking(request):
+    return  HttpResponse("*IS WORKING*")

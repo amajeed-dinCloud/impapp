@@ -16,11 +16,13 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.conf.urls.static import static
 import settings
+from impapp.app.views import isworking
 # from django.contrib import admin
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^service/',include('impapp.app.urls')),
+    url(r'^$', isworking),
     # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
