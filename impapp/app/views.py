@@ -11,4 +11,5 @@ def test(request):
     newdoc.save()
     print newdoc.image.url
     newdoc.delete()
+
     return HttpResponse("Service is running")
