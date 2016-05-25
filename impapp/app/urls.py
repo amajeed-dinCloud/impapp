@@ -1,4 +1,3 @@
-from impapp.app.views import test
 """impapp URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -15,10 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url,include
-from impapp.app.views import test
+from impapp.app.views import *
 # from django.contrib import admin
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
-    url(r'^test', test),
+    url(r'^sign_up', sign_up),
+    url(r'^login', login),
 ]
