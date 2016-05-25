@@ -1,5 +1,3 @@
-from pandas.core.common import _ABCGeneric
-
 __author__ = 'Abdul'
 from django.core.validators import validate_email,URLValidator
 from django.core.exceptions import ValidationError
