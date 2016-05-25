@@ -1,11 +1,11 @@
 __author__ = 'Abdul'
-from django.core.validators import validate_email,URLValidator
+from django.core.validators import validate_email as v_email, URLValidator
 from django.core.exceptions import ValidationError
 
 
 def validate_email(email):
     try:
-        validate_email(email)
+        v_email(email)
         return True
     except ValidationError:
         return False

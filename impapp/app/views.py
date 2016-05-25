@@ -31,7 +31,7 @@ def sign_up(request):
                     user_obj = User()
                     user_obj.name = name
                     user_obj.city = city
-                    if util_functions.validate_email(email):
+                    if email and util_functions.validate_email(email):
                         user_obj.email = email
                     if util_functions.validate_age(age):
                         user_obj.age = int(age)
@@ -60,10 +60,10 @@ def is_user_exists(email, fb_id, ins_id):
     user_obj = None
     if email:
         user_obj = User.objects.filter(email=email)
-    elif fb_id:
-        user_obj = User.objects.filter(email=fb_id)
-    elif ins_id:
-        user_obj = User.objects.filter(email=ins_id)
+    if not user_obj and fb_id:
+        user_obj = User.objects.filter(fb_id=fb_id)
+    if not user_obj and ins_id:
+        user_obj = User.objects.filter(ins_id=ins_id)
 
     if user_obj:
         user_obj = user_obj[0]
@@ -126,7 +126,6 @@ def update_profile(request):
                 if not user_obj:
                     out_dict["message"] = "User is not found."
                 else:
-                    user_obj = user_obj[0]
                     if name:
                         user_obj.name = name
                     if util_functions.validate_age(age):
