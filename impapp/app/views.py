@@ -139,7 +139,8 @@ def update_profile(request):
                         user_obj.fb_id = fb_id
                     if not user_obj.ins_id and ins_id:
                         user_obj.ins_id = ins_id
-
+                    if img_url:
+                        user_obj.img_url = img_url
                     user_obj.save()
 
                     out_dict["user"] = make_user_response(user_obj)

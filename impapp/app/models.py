@@ -2,13 +2,13 @@ __author__ = 'Abdul'
 from django.db import models
 
 class User(models.Model):
-    name = models.CharField(max_length=150,null=False)
-    city = models.CharField(max_length=100,null=True)
-    age = models.IntegerField(max_length=11,null=True)
-    email = models.EmailField(unique=True, null=True)
-    img_url = models.URLField(blank=True,null=True)
-    fb_id = models.CharField(max_length=50,null=True)
-    ins_id = models.CharField(max_length=50,null=True)
+    name = models.CharField(max_length=150, null=False)
+    city = models.CharField(max_length=100, null=True)
+    age = models.IntegerField(max_length=11, null=True)
+    email = models.CharField(max_length=250, unique=True, null=True)
+    img_url = models.URLField(blank=True, null=True)
+    fb_id = models.CharField(unique=True, max_length=50, null=True)
+    ins_id = models.CharField(unique=True, max_length=50, null=True)
     password = models.CharField(max_length=100, null=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)
