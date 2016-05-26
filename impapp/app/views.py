@@ -21,6 +21,7 @@ def sign_up(request):
             img_url = request.POST.get('img_url')
             fb_id = request.POST.get('fb_id')
             ins_id = request.POST.get('ins_id')
+            password = request.POST.get('password')
             if not email and not ins_id and not fb_id or not name:
                out_dict["message"] = "Name, email, fb_id or ins_id  is missing."
             else:
@@ -33,14 +34,19 @@ def sign_up(request):
                     user_obj.city = city
                     if email and util_functions.validate_email(email):
                         user_obj.email = email
+                        if not fb_id and not ins_id and not password:
+                            out_dict["message"] = "Please provide a password"
+                            return HttpResponse(json.dumps(out_dict))
+                        else:
+                            user_obj.password = password
                     if util_functions.validate_age(age):
                         user_obj.age = int(age)
                     if util_functions.validate_url(img_url):
                         user_obj.img_url = img_url
                     if fb_id:
-                        user_obj.fb_id=fb_id
+                        user_obj.fb_id = fb_id
                     if ins_id:
-                        user_obj.ins_id=ins_id
+                        user_obj.ins_id = ins_id
                     if city:
                         user_obj.city = city
                     user_obj.save()
@@ -85,7 +91,7 @@ def login(request):
             else:
                 user_obj = is_user_exists(email, fb_id, ins_id)
                 if user_obj:
-                    if email:
+                    if email and not fb_id and not ins_id:
                         if user_obj.email == email and user_obj.password == password:
                             out_dict["user"] = make_user_response(user_obj)
                             out_dict["code"] = 200
@@ -161,8 +167,8 @@ def update_profile(request):
 
 
 def make_user_response(user_obj):
-    return {"name": user_obj.name, "age": user_obj.age, "city": user_obj.city, "email": user_obj.email,
-            "img_url": user_obj.img_url, "fb_id": user_obj.fb_id, "ins_id": user_obj.ins_id}
+    return {"name": user_obj.name, "age": user_obj.age, "city": user_obj.city, "img_url": user_obj.img_url,
+            "email": user_obj.email,  "fb_id": user_obj.fb_id, "ins_id": user_obj.ins_id, "password": user_obj.password}
 
 
 @csrf_exempt
