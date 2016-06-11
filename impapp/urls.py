@@ -16,15 +16,18 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.conf.urls.static import static
 import settings
-from impapp.app.views import isworking, redirect_insta
-# from django.contrib import admin
+from impapp.app.views import redirect_insta
+from django.contrib import admin
+from impapp.admin_panel.views import is_working
+
 
 urlpatterns = [
-    # url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
     url(r'^service/',include('impapp.app.urls')),
-    url(r'^$', isworking),
+    url(r'^$',include('impapp.admin_panel.urls')),
     url(r'^redirect_insta',redirect_insta),
-
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'admin/login.html'}),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -25,3 +25,11 @@ def validate_url(url):
         return True
     except ValidationError:
         return False
+
+
+def validate_float(num):
+    try:
+        num = float(num)
+        return 0 < num <= 5
+    except Exception:
+        return False

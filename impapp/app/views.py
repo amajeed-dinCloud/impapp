@@ -1,13 +1,13 @@
 __author__ = 'Abdul'
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from models import Document, User
+from models import Document, User, Ratings
 import json
 import requests
-from impapp import configs as conf
 import traceback
 from impapp import util_functions
-
+from impapp import configs as conf
+from impapp.app.functions import *
 
 @csrf_exempt
 def sign_up(request):
@@ -18,16 +18,15 @@ def sign_up(request):
             age = request.POST.get('age')
             city = request.POST.get('city')
             email = request.POST.get('email')
-            img_url = request.POST.get('img_url')
             fb_id = request.POST.get('fb_id')
             ins_id = request.POST.get('ins_id')
             password = request.POST.get('password')
             if not email and not ins_id and not fb_id or not name:
-               out_dict["message"] = "Name, email, fb_id or ins_id  is missing."
+                out_dict["message"] = "Name, email, fb_id or ins_id  is missing."
             else:
                 user_obj = is_user_exists(email, fb_id, ins_id)
                 if user_obj:
-                    out_dict["message"]="User already exists"
+                    out_dict["message"] = "User already exists"
                 else:
                     user_obj = User()
                     user_obj.name = name
@@ -41,8 +40,6 @@ def sign_up(request):
                             user_obj.password = password
                     if util_functions.validate_age(age):
                         user_obj.age = int(age)
-                    if util_functions.validate_url(img_url):
-                        user_obj.img_url = img_url
                     if fb_id:
                         user_obj.fb_id = fb_id
                     if ins_id:
@@ -62,21 +59,6 @@ def sign_up(request):
     return HttpResponse(json.dumps(out_dict))
 
 
-def is_user_exists(email, fb_id, ins_id):
-    user_obj = None
-    if email:
-        user_obj = User.objects.filter(email=email)
-    if not user_obj and fb_id:
-        user_obj = User.objects.filter(fb_id=fb_id)
-    if not user_obj and ins_id:
-        user_obj = User.objects.filter(ins_id=ins_id)
-
-    if user_obj:
-        user_obj = user_obj[0]
-
-    return user_obj
-
-
 @csrf_exempt
 def login(request):
     out_dict = {"code": 500, "status": "error", "message": ""}
@@ -87,7 +69,7 @@ def login(request):
             ins_id = request.POST.get('ins_id')
             password = request.POST.get('password')
             if not email and not ins_id and not fb_id:
-               out_dict["message"] = "Email, fb_id or ins_id is missing."
+                out_dict["message"] = "Email, fb_id or ins_id is missing."
             else:
                 user_obj = is_user_exists(email, fb_id, ins_id)
                 if user_obj:
@@ -123,7 +105,7 @@ def update_profile(request):
             email = request.POST.get('email')
             fb_id = request.POST.get('fb_id')
             ins_id = request.POST.get('ins_id')
-            img_url = request.POST.get('img_url')
+            img_id = request.POST.get('img_id')
 
             if not email and not ins_id and not fb_id:
                out_dict["message"] = "Email, fb_id or ins_id is missing."
@@ -144,9 +126,10 @@ def update_profile(request):
                         user_obj.fb_id = fb_id
                     if not user_obj.ins_id and ins_id:
                         user_obj.ins_id = ins_id
-                    if img_url:
-                        user_obj.img_url = img_url
                     user_obj.save()
+
+                    if img_id:
+                        update_profile_image_internal(user_obj, img_id)
 
                     out_dict["user"] = make_user_response(user_obj)
                     out_dict["code"] = 200
@@ -161,54 +144,52 @@ def update_profile(request):
     return HttpResponse(json.dumps(out_dict))
 
 
-
-
-
-
-
-def make_user_response(user_obj):
-    return {"name": user_obj.name, "age": user_obj.age, "city": user_obj.city, "img_url": user_obj.img_url,
-            "email": user_obj.email,  "fb_id": user_obj.fb_id, "ins_id": user_obj.ins_id, "password": user_obj.password}
-
-
 @csrf_exempt
 def upload_image(request):
     out_dict = {"code": 500, "status": "error", "message": ""}
     if request.method == "POST":
-        image = request.FILES.get('image')
-        email = request.POST.get('email')
-        fb_id = request.POST.get('fb_id')
-        ins_id = request.POST.get('ins_id')
-        type = request.POST.get('type', '2')
-        if not email and not ins_id and not fb_id and not image:
-            out_dict["message"] = "Email, fb_id or ins_id is missing."
-        else:
-            user_obj = is_user_exists(email, fb_id, ins_id)
-            if not user_obj:
-                out_dict["message"] = "User not found."
-            else:
-                if type == '1':
-                    img_obj = Document.objects.filter(image=image, user=user_obj, type=1)
-                    if img_obj:
-                        img_obj = img_obj[0]
-                        img_obj.image.delete()
-                    else:
-                        img_obj = Document()
-                    img_obj.image = image
-                    img_obj.user = user_obj
-                    img_obj.save()
-                    out_dict["img_url"] = str(img_obj.image.url)
+        try:
+            image = request.FILES['image']
+            email = request.POST.get('email')
+            fb_id = request.POST.get('fb_id')
+            ins_id = request.POST.get('ins_id')
+            type = request.POST.get('type', '2')
 
-                elif type == '2':
-                    img_obj = Document.objects.filter(image=image, user=user_obj, type=2)
-                    if len(img_obj) <= conf.USER_MAX_IMAGES:
-                        Document.objects.create(image=image, user=user_obj, type=2)
+            if not email and not ins_id and not fb_id:
+                out_dict["message"] = "Image, Email, fb_id or ins_id is missing."
+
+            else:
+                user_obj = is_user_exists(email, fb_id, ins_id)
+                if not user_obj:
+                    out_dict["message"] = "User not found."
+                else:
+                    if type == '1':
+                        img_obj = Document.objects.filter(user=user_obj, type=type)
+                        if img_obj:
+                            img_obj = img_obj[0]
+                            img_obj.image.delete()
+                        else:
+                            img_obj = Document()
                         img_obj.image = image
                         img_obj.user = user_obj
                         img_obj.save()
-                        out_dict["img_url"] = str(img_obj.image.url)
-                    else:
-                        out_dict["message"] = "Max no of images are already submitted."
+                        out_dict = make_image_dict(img_obj)
+                        out_dict["code"] = 200
+                        out_dict["status"] = "ok"
+
+                    elif type == '2':
+                        img_objs = Document.objects.filter(user=user_obj)
+                        if not img_objs:
+                            type = 1
+                        if len(img_objs) <= conf.USER_MAX_IMAGES:
+                            img_obj = Document.objects.create(image=image, user=user_obj, type=type)
+                            out_dict = make_image_dict(img_obj)
+                            out_dict["code"] = 200
+                            out_dict["status"] = "ok"
+                        else:
+                            out_dict["message"] = "Max no of images are already submitted."
+        except Exception, ex:
+            out_dict = {"code": 500, "status": "error", "message": str(ex)}
 
     else:
         out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
@@ -216,15 +197,7 @@ def upload_image(request):
     return HttpResponse(json.dumps(out_dict))
 
 
-    print newdoc.image.url
-    newdoc.delete()
-
-    return HttpResponse("Service is running")
-
-def isworking(request):
-    return  HttpResponse("*IS WORKING*")
-
-
+@csrf_exempt
 def redirect_insta(request):
     out = {"code": 501, "error_type": "general error", "error_message": "there is some issue on server auth code is missing."}
     code = request.GET.get('code')
@@ -236,4 +209,135 @@ def redirect_insta(request):
         out = json.dumps(out)
 
     return HttpResponse(out)
+
+@csrf_exempt
+def update_profile_image(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "POST":
+        try:
+            email = request.POST.get('email')
+            fb_id = request.POST.get('fb_id')
+            ins_id = request.POST.get('ins_id')
+            img_id = request.POST['img_id']
+
+            if not email and not ins_id and not fb_id:
+                out_dict["message"] = "Image, Email, fb_id or ins_id is missing."
+
+            else:
+                user_obj = is_user_exists(email, fb_id, ins_id)
+                if not user_obj:
+                    out_dict["message"] = "User not found."
+                else:
+                    status = update_profile_image_internal(user_obj, img_id)
+                    if status:
+                        out_dict["user_images"] = make_user_images(user_obj)
+                        out_dict["code"] = 200
+                        out_dict["status"] = "ok"
+                    else:
+                        out_dict["message"] = "No image found to update."
+        except Exception, ex:
+            out_dict = {"code": 500, "status": "error", "message": str(ex)}
+
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))
+
+
+@csrf_exempt
+def delete_user_image(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "POST":
+        try:
+            email = request.POST.get('email')
+            fb_id = request.POST.get('fb_id')
+            ins_id = request.POST.get('ins_id')
+            img_ids = request.POST.getlist('img_id')
+
+            if not email and not ins_id and not fb_id:
+                out_dict["message"] = "Email, fb_id or ins_id is missing."
+            else:
+                user_obj = is_user_exists(email, fb_id, ins_id)
+                if not user_obj:
+                    out_dict["message"] = "User not found."
+                else:
+                    status = delete_images(user_obj, img_ids)
+                    if status:
+                        out_dict["user_images"] = make_user_images(user_obj)
+                        out_dict["code"] = 200
+                        out_dict["status"] = "ok"
+                    else:
+                        out_dict["message"] = "No image found to delete."
+        except Exception, ex:
+            out_dict = {"code": 500, "status": "error", "message": str(ex)}
+
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))
+
+@csrf_exempt
+def delete_user(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "POST":
+        try:
+            email = request.POST.get('email')
+            fb_id = request.POST.get('fb_id')
+            ins_id = request.POST.get('ins_id')
+            if not email and not ins_id and not fb_id:
+                out_dict["message"] = "Email, fb_id or ins_id is missing."
+
+            else:
+                user_obj = is_user_exists(email, fb_id, ins_id)
+                if not user_obj:
+                    out_dict["message"] = "User not found."
+                else:
+                    delete_images(user_obj)
+                    user_obj.delete()
+                    out_dict["code"] = 200
+                    out_dict["status"] = "ok"
+        except Exception, ex:
+            out_dict = {"code": 500, "status": "error", "message": str(ex)}
+
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))
+
+
+@csrf_exempt
+def rate_user(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "POST":
+        try:
+            rated_by = request.POST.get('rated_by')
+            rated_profile = request.POST.get('rated_profile')
+            rating = request.POST.get('rating')
+            if not rated_by or not rated_profile or not rating:
+                out_dict["message"] = "Mandatory param is missing."
+            elif rated_by != rated_profile:
+                is_valid_rating = util_functions.validate_float(rating)
+                if is_valid_rating:
+                    rated_by = User.objects.get(id=rated_by)
+                    rated_profile = User.objects.get(id=rated_profile)
+                    rating = float(rating)
+                    is_rated = Ratings.objects.filter(rated_by=rated_by, rated_profile=rated_profile)
+                    rating_obj = is_rated[0] if is_rated else Ratings()
+                    rating_obj.rated_profile = rated_profile
+                    rating_obj.rated_by = rated_by
+                    rating_obj.rating = rating
+                    rating_obj.save()
+                    out_dict["status"] = "ok"
+                    out_dict["code"] = 200
+                else:
+                    out_dict["message"] = "Rating is not valid."
+            else:
+                out_dict["message"] = "Self rating not allowed."
+        except Exception, ex:
+            out_dict = {"code": 500, "status": "error", "message": str(ex)}
+
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))
 
