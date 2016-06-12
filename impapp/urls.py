@@ -24,7 +24,8 @@ from impapp.admin_panel.views import is_working
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^service/',include('impapp.app.urls')),
-    url(r'^$',include('impapp.admin_panel.urls')),
+    url(r'^panel/',include('impapp.admin_panel.urls')),
+    url(r'^$', is_working),
     url(r'^redirect_insta',redirect_insta),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'admin/login.html'}),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
