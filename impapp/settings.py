@@ -136,4 +136,4 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  '../templates'),
 )
 
-LOCAL = 022
+LOCAL = 0
