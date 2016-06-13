@@ -354,7 +354,7 @@ def profiles_list(request):
             user_obj = User.objects.get(id=user_id)
             exclude_list = list(Ratings.objects.filter(rated_by_id=user_obj).values_list('rated_profile',flat=True))
             exclude_list.append(user_id)
-            user_profiles = User.objects.filter(is_approved=1, is_public=1).exclude(id__in=exclude_list)
+            user_profiles = User.objects.filter(is_approved=1, is_public=1, is_active=1).exclude(id__in=exclude_list)
             all_pages = Paginator(user_profiles, page_size)
             final_result = []
             for res in all_pages.page(page):
