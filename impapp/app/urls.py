@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^delete_user_image', delete_user_image),
     url(r'^rate_user', rate_user),
     url(r'^delete_user', delete_user),
+    url(r'^profiles_list', profiles_list),
 ]
 

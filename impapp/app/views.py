@@ -8,6 +8,7 @@ import traceback
 from impapp import util_functions
 from impapp import configs as conf
 from impapp.app.functions import *
+from django.core.paginator import Paginator
 
 @csrf_exempt
 def sign_up(request):
@@ -341,3 +342,29 @@ def rate_user(request):
 
     return HttpResponse(json.dumps(out_dict))
 
+
+@csrf_exempt
+def profiles_list(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "GET":
+        try:
+            user_id = request.GET['user_id']
+            page = request.GET.get('page', 1)
+            page_size = request.GET.get('page_size', 100)
+            user_obj = User.objects.get(id=user_id)
+            exclude_list = list(Ratings.objects.filter(rated_by_id=user_obj).values_list('rated_profile',flat=True))
+            exclude_list.append(user_id)
+            user_profiles = User.objects.filter(is_approved=1, is_public=1).exclude(id__in=exclude_list)
+            all_pages = Paginator(user_profiles, page_size)
+            final_result = []
+            for res in all_pages.page(page):
+                final_result.append(make_user_response(res, hide_pass=True))
+
+            out_dict = {"code": 200, "status": "ok", "message": "",
+                        "num_pages": all_pages.num_pages, "user_profiles": final_result}
+        except Exception, ex:
+            out_dict["message"] = str(ex)
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))

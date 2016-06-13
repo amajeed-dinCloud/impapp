@@ -14,11 +14,15 @@ def update_profile_image_internal(user_obj, img_id):
     return False
 
 
-def make_user_response(user_obj):
-    return {"name": user_obj.name, "age": user_obj.age, "city": user_obj.city, "fb_id": user_obj.fb_id,
-            "profile_rating": user_obj.profile_rating, "is_public": user_obj.is_public, "email": user_obj.email,
-            "user_images": make_user_images(user_obj), "ins_id": user_obj.ins_id, "password": user_obj.password,
-            "is_public": user_obj.is_public, "id": user_obj.id}
+def make_user_response(user_obj, hide_pass=None):
+    user_dict = {"name": user_obj.name, "age": user_obj.age, "city": user_obj.city, "fb_id": user_obj.fb_id,
+                "profile_rating": user_obj.profile_rating, "is_public": user_obj.is_public, "email": user_obj.email,
+                "user_images": make_user_images(user_obj), "ins_id": user_obj.ins_id, "password": user_obj.password,
+                "is_public": user_obj.is_public, "id": user_obj.id}
+
+    if hide_pass:
+        del(user_dict["password"])
+    return user_dict
 
 
 def make_user_images(user_obj):
