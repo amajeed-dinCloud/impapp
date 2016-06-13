@@ -1,10 +1,13 @@
 __author__ = 'Abdul'
 import MySQLdb
 import settings
+import datetime
+
 
 def refresh_ratings():
     updated_rows = 0
     try:
+        print "********"+str(datetime.datetime.now())+"********"
         conn = MySQLdb.connect(host=settings.DATABASE_HOST, user=settings.DATABASE_USER, passwd=settings.DATABASE_PASS,
                                db=settings.DATABASES_CURRENT)
         print "Connection Successful."
@@ -22,6 +25,3 @@ def refresh_ratings():
     except Exception, ex:
         print str(ex)
     return updated_rows
-
-refresh_ratings()
-
