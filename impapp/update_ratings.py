@@ -25,3 +25,6 @@ def refresh_ratings():
     except Exception, ex:
         print str(ex)
     return updated_rows
+
+
+refresh_ratings()
