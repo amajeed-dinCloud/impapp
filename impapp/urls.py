@@ -30,7 +30,8 @@ urlpatterns = [
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'admin/login.html'}),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':  settings.STATIC_ROOT } ),
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
