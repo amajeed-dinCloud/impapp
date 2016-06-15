@@ -22,6 +22,7 @@ def sign_up(request):
             fb_id = request.POST.get('fb_id')
             ins_id = request.POST.get('ins_id')
             password = request.POST.get('password')
+            is_public = request.POST.get('is_public')
             if not email and not ins_id and not fb_id or not name:
                 out_dict["message"] = "Name, email, fb_id or ins_id  is missing."
             else:
@@ -47,6 +48,8 @@ def sign_up(request):
                         user_obj.ins_id = ins_id
                     if city:
                         user_obj.city = city
+                    if is_public == '0':
+                        user_obj.is_public = 0
                     user_obj.save()
                     out_dict["user"] = make_user_response(user_obj)
                     out_dict["code"] = 200
@@ -107,6 +110,8 @@ def update_profile(request):
             fb_id = request.POST.get('fb_id')
             ins_id = request.POST.get('ins_id')
             img_id = request.POST.get('img_id')
+            password = request.POST.get('password')
+            is_public = request.POST.get('is_public')
 
             if not email and not ins_id and not fb_id:
                out_dict["message"] = "Email, fb_id or ins_id is missing."
@@ -127,6 +132,11 @@ def update_profile(request):
                         user_obj.fb_id = fb_id
                     if not user_obj.ins_id and ins_id:
                         user_obj.ins_id = ins_id
+                    if password:
+                        user_obj.password = password
+                    if is_public == '0':
+                        user_obj.is_public = 0
+
                     user_obj.save()
 
                     if img_id:
