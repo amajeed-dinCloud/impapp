@@ -5,6 +5,7 @@ from impapp.admin_panel.views import *
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^update_all_ratings', update_all_ratings),
+    url(r'^custom_attributes_list', custom_attributes_list),
 
 
 

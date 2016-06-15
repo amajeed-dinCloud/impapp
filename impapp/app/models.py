@@ -76,3 +76,13 @@ class Ratings(models.Model):
 
     def __unicode__(self):
         return u'%s %s %s' % (self.rated_by.name, self.rated_profile.name, self.rating)
+
+
+class CustomAttributes(models.Model):
+    key = models.CharField(max_length=100, unique=True, null=False)
+    val = models.CharField(max_length=1000)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return u'%s %s' % (self.key, self.val)
