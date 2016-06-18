@@ -381,3 +381,37 @@ def profiles_list(request):
         out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
 
     return HttpResponse(json.dumps(out_dict))
+
+
+@csrf_exempt
+def update_user_image(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "POST":
+        try:
+            email = request.POST.get('email')
+            fb_id = request.POST.get('fb_id')
+            ins_id = request.POST.get('ins_id')
+            img_id = request.POST['img_id']
+            image = request.FILES['image']
+
+            if not email and not ins_id and not fb_id:
+                out_dict["message"] = "Email, fb_id or ins_id is missing."
+            else:
+                user_obj = is_user_exists(email, fb_id, ins_id)
+                if not user_obj:
+                    out_dict["message"] = "User not found."
+                else:
+                    doc_obj = Document.objects.get(id=img_id)
+                    doc_obj.image.delete()
+                    doc_obj.image = image
+                    doc_obj.save()
+                    out_dict["user"] = make_user_response(user_obj)
+                    out_dict["code"] = 200
+                    out_dict["status"] = "ok"
+        except Exception, ex:
+            out_dict = {"code": 500, "status": "error", "message": str(ex)}
+
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))
