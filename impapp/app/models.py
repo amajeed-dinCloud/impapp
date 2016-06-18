@@ -17,6 +17,7 @@ class User(models.Model):
     is_public = models.BooleanField(default=1)
     profile_rating = models.FloatField(default=0)
     is_active = models.BooleanField(default=1)
+    agent = models.CharField(max_length=20, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)
 

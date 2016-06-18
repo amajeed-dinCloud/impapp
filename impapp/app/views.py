@@ -23,6 +23,7 @@ def sign_up(request):
             ins_id = request.POST.get('ins_id')
             password = request.POST.get('password')
             is_public = request.POST.get('is_public')
+            agent = request.POST.get('agent')
             if not email and not ins_id and not fb_id or not name:
                 out_dict["message"] = "Name, email, fb_id or ins_id  is missing."
             else:
@@ -50,6 +51,8 @@ def sign_up(request):
                         user_obj.city = city
                     if is_public == '0':
                         user_obj.is_public = 0
+                    if agent:
+                        user_obj.agent = agent
                     user_obj.save()
                     out_dict["user"] = make_user_response(user_obj)
                     out_dict["code"] = 200
