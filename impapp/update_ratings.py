@@ -23,6 +23,7 @@ def refresh_ratings():
         conn.close()
         print "Closing Connection."
     except Exception, ex:
+        updated_rows = 'NA'
         print str(ex)
     return updated_rows
 

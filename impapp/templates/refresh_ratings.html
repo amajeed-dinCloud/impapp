@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+        <div id="page-wrapper">
+
+            <div class="row">
+                <!-- Page Header -->
+                <div class="col-lg-12">
+                    <h1 class="page-header">Refresh Ratings</h1>
+
+                </div>
+                <!--End Page Header -->
+                <div class="col-lg-6">
+                     <!--  Alert Styles -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            {% if update_rows > 0 %}
+                                <div class="alert alert-success">
+                                    No of records updated {{ update_rows }}.
+                                </div>
+                            {% endif %}
+                            {% if update_rows == 0 %}
+                                <div class="alert alert-info">
+                                No record to update. Ratings are already up to dated.
+                                </div>
+                            {% endif %}
+                            {% if update_rows == 'NA' %}
+                                <div class="alert alert-danger">
+                                There is some issue on server please check server logs and contact server guy if exists.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- End Alert Styles -->
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+        <!-- end page-wrapper -->
+
+{% endblock %}
