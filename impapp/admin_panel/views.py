@@ -38,7 +38,6 @@ def del_user(request):
     try:
         redirect_url = request.GET["redirect_url"]
         user_id = request.GET["user_id"]
-        print redirect_url
         user_obj = User.objects.get(id=user_id)
         delete_images(user_obj)
         user_obj.delete()
