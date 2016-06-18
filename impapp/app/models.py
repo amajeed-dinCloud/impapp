@@ -15,7 +15,7 @@ class User(models.Model):
     password = models.CharField(max_length=100, null=True)
     is_approved = models.BooleanField(default=0)
     is_public = models.BooleanField(default=1)
-    profile_rating = models.FloatField(default=0)
+    profile_rating = models.FloatField(default=0, null=True)
     is_active = models.BooleanField(default=1)
     agent = models.CharField(max_length=20, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True)

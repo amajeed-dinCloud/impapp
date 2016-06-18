@@ -14,7 +14,7 @@ def validate_email(email):
 def validate_age(age):
     try:
         age = int(age)
-        return 18 < age < 100
+        return 18 <= age < 100
     except Exception:
         return False
 

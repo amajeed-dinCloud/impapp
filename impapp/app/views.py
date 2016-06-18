@@ -415,3 +415,28 @@ def update_user_image(request):
         out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
 
     return HttpResponse(json.dumps(out_dict))
+
+import datetime
+@csrf_exempt
+def top_ten(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "GET":
+        try:
+            current_time = datetime.datetime.now()
+            end_date = current_time+datetime.timedelta(days=2, hours=3, minutes=10)
+            diff = end_date-current_time
+            hours, remainder = divmod(diff.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            counter = {"days": diff.days, "hours": hours, "minutes": minutes, "seconds": seconds}
+
+            final_result = []
+            user_profiles = User.objects.filter(is_approved=1, is_public=1, is_active=1).order_by('-profile_rating')[:10]
+            for res in user_profiles:
+                final_result.append(make_user_response(res, hide_pass=True))
+            out_dict = {"code": 200, "status": "ok", "message": "", "user_profiles": final_result, "counter": counter}
+        except Exception, ex:
+            out_dict["message"] = str(ex)
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))
