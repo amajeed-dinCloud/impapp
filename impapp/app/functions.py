@@ -64,3 +64,8 @@ def is_user_exists(email, fb_id, ins_id):
         user_obj = user_obj[0]
 
     return user_obj
+
+
+def make_cus_attr_dict(cus_obj):
+    out_dict = {"id": cus_obj.id, "val": cus_obj.val, "desc": cus_obj.desc, "key": cus_obj.key}
+    return out_dict

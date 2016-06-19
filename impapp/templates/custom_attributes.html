@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block main_content %}
+    {% load tags %}
         <div id="page-wrapper">
 
             <div class="row">
@@ -69,9 +70,9 @@
                                             <td>{{ custom.desc }}</td>
                                             <td>{{ custom.key }}</td>
                                             <td>{{ custom.val }}</td>
-                                            <td>{{ updated_on }}</td>
-                                            <td>{{ created_on }}</td>
-                                            <td colspan="2"><button type="button" class="btn btn-info" onclick='edit_attrib("{{ custom.id }}","{{ custom.key }}","{{ custom.val }}","{{custom.desc }}");'>Edit</button>
+                                            <td>{{ custom.updated_on }}</td>
+                                            <td>{{ custom.created_on }}</td>
+                                            <td colspan="2"><button type="button" class="btn btn-info" onclick='edit_attrib("{{ custom.id }}");'>Edit</button>
                                             <button type="button" class="btn btn-danger" onclick='del_attrib("{{ custom.id }}");'>Delete</button></td>
                                         </tr>
                                     {% endfor %}
@@ -94,12 +95,17 @@
         <!-- end page-wrapper -->
 <script type="text/javascript">
 
-function edit_attrib(cid,key,val,desc){
-     $('body').scrollTop(0);
-    $("#c_id").val(cid);
-    $("#key").val(key);
-    $("#val").val(val);
-    $("#desc").val(desc);
+function edit_attrib(cid){
+    $.get("/panel/get_attrib?c_id="+cid, function(data){
+        data=JSON.parse(data)
+        $('body').scrollTop(0);
+        $("#c_id").val(data.id);
+        $("#key").val(data.key);
+        $("#val").val(data.val);
+        $("#desc").val(data.desc);
+
+
+    });
 }
 
 function del_attrib(cid){

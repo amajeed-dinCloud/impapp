@@ -440,3 +440,22 @@ def top_ten(request):
         out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
 
     return HttpResponse(json.dumps(out_dict))
+
+
+
+@csrf_exempt
+def get_custom_attributes(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "GET":
+        try:
+            final_result=[]
+            custom_objs = CustomAttributes.objects.all()
+            for cus_obj in custom_objs:
+                final_result.append(make_cus_attr_dict(cus_obj))
+            out_dict = {"code": 200, "status": "ok", "message": "", "custom_attributes": final_result}
+        except Exception, ex:
+            out_dict["message"] = str(ex)
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))

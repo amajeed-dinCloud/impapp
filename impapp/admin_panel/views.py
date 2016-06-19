@@ -102,7 +102,6 @@ def update_user(request):
     return HttpResponseRedirect(redirect_url+"?msg="+msg)
 
 
-
 def add_edit_attribute(request):
     try:
         c_id = request.POST.get('c_id')
@@ -122,7 +121,7 @@ def add_edit_attribute(request):
         attr.val = val
         attr.save()
 
-    except Exception,ex:
+    except Exception, ex:
         print ex
         msg = str(ex)
     return HttpResponseRedirect(redirect_url+"?msg="+msg)
@@ -139,3 +138,14 @@ def del_attribute(request):
         msg = str(ex)
 
     return HttpResponseRedirect(redirect_url+"?msg="+msg)
+
+
+def get_attrib(request):
+    out_dict = {}
+    try:
+        cid = request.GET["c_id"]
+        cus_obj = CustomAttributes.objects.get(id=cid)
+        out_dict = make_cus_attr_dict(cus_obj)
+    except Exception,ex:
+        print ex
+    return HttpResponse(json.dumps(out_dict))
