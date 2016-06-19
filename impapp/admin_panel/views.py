@@ -74,13 +74,13 @@ def update_user(request):
         password = request.POST.get('password')
 
         is_active = request.POST.get('is_active')
-        is_active = True if is_active else False
+        is_active = 1 if is_active else 0
 
         is_public = request.POST.get('is_public')
-        is_public = True if is_public else False
+        is_public = 1 if is_public else 0
 
         is_approved = request.POST.get('is_approved')
-        is_approved = True if is_approved else False
+        is_approved = 1 if is_approved else 0
 
         user_obj = User.objects.get(id=user_id)
         user_obj.name=name
