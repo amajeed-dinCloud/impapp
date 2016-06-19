@@ -139,6 +139,8 @@ def update_profile(request):
                         user_obj.password = password
                     if is_public == '0':
                         user_obj.is_public = 0
+                    if is_public == '1':
+                        user_obj.is_public = 1
 
                     user_obj.save()
 
