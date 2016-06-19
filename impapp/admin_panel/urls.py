@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^del_user', del_user),
     url(r'^get_user', get_user),
     url(r'^update_user', update_user),
+    url(r'^add_edit_attribute', add_edit_attribute),
+    url(r'^del_attribute', del_attribute),
 
 
 

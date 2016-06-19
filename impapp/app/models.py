@@ -80,6 +80,7 @@ class Ratings(models.Model):
 
 
 class CustomAttributes(models.Model):
+    desc = models.CharField(max_length=250,null=True)
     key = models.CharField(max_length=100, unique=True, null=False)
     val = models.CharField(max_length=1000)
     updated_on = models.DateTimeField(auto_now=True)

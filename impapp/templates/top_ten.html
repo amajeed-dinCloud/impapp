@@ -120,7 +120,7 @@ function populate_modal(user_id){
                    '<div class="checkbox"><label><input type="checkbox" id="is_public" name="is_public">Is Public</label></div>' +
                    '<div class="checkbox"><label><input type="checkbox"  id="is_active" name="is_active">Is Active</label></div></div>'+
                    '<div class=""><input type="hidden"  id="user_id" value='+data.id+' name="user_id"></div></div>'+
-                   '<div class=""><input type="hidden"  id="redirect_url" value="{{ request.path }}" name="redirect_url"></div></div>'
+                   '<div class=""><input type="hidden"  id="redirect_url" value="{{ request.path }}" name="redirect_url"><input type="hidden"  id="redirect_url" value="{{ request.path }}" name="redirect_url"></div></div>'
                    )
 
                    if(data.is_approved) $("#is_approved").prop('checked',true)

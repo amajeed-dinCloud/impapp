@@ -24,7 +24,9 @@ def update_all_ratings(request):
 
 @login_required
 def custom_attributes_list(request):
-    return render_to_response('custom_attributes.html', {'request': request, 'menu': 'custom_attributes'},
+    attrib_list = CustomAttributes.objects.all()
+    return render_to_response('custom_attributes.html', {'request': request, 'menu': 'custom_attributes',
+                                                         "attrib_list":attrib_list},
                               context_instance=RequestContext(request))
 
 @login_required
@@ -97,4 +99,43 @@ def update_user(request):
 
     except Exception, ex:
         msg = str(ex)
+    return HttpResponseRedirect(redirect_url+"?msg="+msg)
+
+
+
+def add_edit_attribute(request):
+    try:
+        c_id = request.POST.get('c_id')
+        key = request.POST['key']
+        val = request.POST.get("val",'')
+        desc = request.POST.get("desc",'')
+        redirect_url = request.POST["redirect_url"]
+        if c_id:
+            attr = CustomAttributes.objects.filter(id=c_id)
+            attr = attr[0] if attr else CustomAttributes()
+            msg = "Custom Attribute Updated."
+        else:
+            attr = CustomAttributes()
+            msg = "Custom Attribute Added."
+        attr.desc = desc
+        attr.key = key
+        attr.val = val
+        attr.save()
+
+    except Exception,ex:
+        print ex
+        msg = str(ex)
+    return HttpResponseRedirect(redirect_url+"?msg="+msg)
+
+
+def del_attribute(request):
+    try:
+        redirect_url = request.GET["redirect_url"]
+        cid = request.GET["c_id"]
+        CustomAttributes.objects.get(id=cid).delete()
+        msg = "Custom Attribute has been delete successfully."
+    except Exception,ex:
+        print ex
+        msg = str(ex)
+
     return HttpResponseRedirect(redirect_url+"?msg="+msg)
