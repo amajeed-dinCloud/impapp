@@ -34,13 +34,18 @@ def sign_up(request):
                     user_obj = User()
                     user_obj.name = name
                     user_obj.city = city
-                    if email and util_functions.validate_email(email):
+                    if email:
                         user_obj.email = email
-                        if not fb_id and not ins_id and not password:
-                            out_dict["message"] = "Please provide a password"
-                            return HttpResponse(json.dumps(out_dict))
-                        else:
-                            user_obj.password = password
+                        if not fb_id and not ins_id:
+                            if not util_functions.check_email(email):
+                                out_dict["message"] = "Please provide a valid email"
+                                return HttpResponse(json.dumps(out_dict))
+                            if not password:
+                                out_dict["message"] = "Please provide a password"
+                                return HttpResponse(json.dumps(out_dict))
+                            else:
+                                user_obj.password = password
+
                     if util_functions.validate_age(age):
                         user_obj.age = int(age)
                     if fb_id:
@@ -129,7 +134,7 @@ def update_profile(request):
                         user_obj.age = int(age)
                     if city:
                         user_obj.city = city
-                    if not user_obj.email and util_functions.validate_email(email):
+                    if not user_obj.email and util_functions.check_email(email):
                         user_obj.email = email
                     if not user_obj.fb_id and fb_id:
                         user_obj.fb_id = fb_id

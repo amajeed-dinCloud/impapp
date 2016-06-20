@@ -3,11 +3,11 @@ from django.core.validators import validate_email as v_email, URLValidator
 from django.core.exceptions import ValidationError
 
 
-def validate_email(email):
+def check_email(email):
     try:
         v_email(email)
         return True
-    except ValidationError:
+    except:
         return False
 
 
