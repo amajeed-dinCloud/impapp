@@ -54,9 +54,11 @@
                                         <td>{{ user_obj.agent }}</td>
                                         <td>{{ user_obj.created_on }}</td>
                                         <td>{{ user_obj.updated_on }}</td>
-                                        <td colspan="2"><button type="button" class="btn btn-info" data-toggle="modal"
-                                                data-target="#editModal" onclick='populate_modal("{{ user_obj.id }}")'>Edit</button>
-                                            <button type="button" class="btn btn-danger" onclick='delete_user("{{ user_obj.id }}");'>Delete</button></td>
+                                        <td colspan="2"><button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                                data-target="#editModal" onclick='populate_modal("{{ user_obj.id }}","{{ request.path }}");'>Edit</button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"data-target="#imgModal" onclick='populate_images("{{ user_obj.id }}");'>View Images</button>
+                                        <button type="button" class="btn btn-warning btn-sm" onclick='delete_ratings("{{ user_obj.id }}","{{ request.path }}");'>Delete Ratings</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick='delete_user("{{ user_obj.id }}","{{ request.path }}");'>Delete</button></td>
 
                                     </tr>
                                     {% endfor %}
@@ -87,6 +89,28 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="modal fade" id="imgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content col-lg-12">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h4 class="modal-title" id="myModalLabel">User Images</h4>
+                                        </div>
+
+                                        {% csrf_token %}
+                                        <div class="modal-body" id="imgModalBody">
+                                            <div class="container" id="imgsDiv">
+
+                                        </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                     <!--  end  Context Classes  -->

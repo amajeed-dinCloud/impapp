@@ -15,7 +15,8 @@ from django.core.paginator import PageNotAnInteger
 @login_required
 def is_working(request):
     all_user = User.objects.all()
-    paginator = Paginator(all_user, 25)
+    page_size = 25
+    paginator = Paginator(all_user, page_size)
     page = request.GET.get('page')
     try:
         all_user = paginator.page(page)
@@ -24,9 +25,8 @@ def is_working(request):
     except EmptyPage:
         all_user = paginator.page(paginator.num_pages)
 
-    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard','all_user': all_user},
-                              context_instance=RequestContext(request))
-    # return HttpResponse("*IS WORKING*")
+    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard','all_user': all_user,
+                                                 "page_size": page_size}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -62,6 +62,24 @@ def del_user(request):
         msg = str(ex)
 
     return HttpResponseRedirect(redirect_url+"?msg="+msg)
+
+
+def del_ratings(request):
+    try:
+        redirect_url = request.GET["redirect_url"]
+        user_id = request.GET["user_id"]
+        user_obj = User.objects.get(id=user_id)
+        ratings = Ratings.objects.filter(rated_profile=user_obj)
+        ratings.delete()
+        user_obj.profile_rating=None
+        user_obj.save()
+        msg = "User ratings have been delete successfully."
+    except Exception,ex:
+        print ex
+        msg = str(ex)
+
+    return HttpResponseRedirect(redirect_url+"?msg="+msg)
+
 
 
 def get_user(request):
@@ -162,3 +180,17 @@ def get_attrib(request):
     except Exception,ex:
         print ex
     return HttpResponse(json.dumps(out_dict))
+
+def get_images(request):
+    out_list = []
+    try:
+        user_id = request.GET['user_id']
+        user_obj = User.objects.get(id=user_id)
+        out_list = make_user_images(user_obj)
+
+    except Exception,ex:
+        import traceback
+        print traceback.print_exc(5)
+        print ex
+
+    return HttpResponse(json.dumps(out_list))

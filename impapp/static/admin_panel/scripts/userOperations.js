@@ -2,15 +2,21 @@
  * Created by Abdul on 6/20/2016.
  */
 
-function delete_user(user_id){
+function delete_user(user_id,url_path){
    if(confirm("This action will delete user and its all images."))
    {
-       var url_path = "{{ request.path }}"
        window.open("/panel/del_user?user_id="+user_id+"&redirect_url="+url_path,"_self")
    }
    }
 
-function populate_modal(user_id){
+function delete_ratings(user_id,url_path){
+   if(confirm("This action will delete user's all ratings."))
+   {
+       window.open("/panel/del_ratings?user_id="+user_id+"&redirect_url="+url_path,"_self")
+   }
+   }
+
+function populate_modal(user_id,redirect_url){
     $.get( "/panel/get_user?user_id="+user_id, function( data ) {
         data = JSON.parse(data,removeNulls)
         if(!$.isEmptyObject(data)){
@@ -25,7 +31,7 @@ function populate_modal(user_id){
                    '<div class="checkbox"><label><input type="checkbox" id="is_public" name="is_public">Is Public</label></div>' +
                    '<div class="checkbox"><label><input type="checkbox"  id="is_active" name="is_active">Is Active</label></div></div>'+
                    '<div class=""><input type="hidden"  id="user_id" value='+data.id+' name="user_id"></div></div>'+
-                   '<div class=""><input type="hidden"  id="redirect_url" value="{{ request.path }}" name="redirect_url"><input type="hidden"  id="redirect_url" value="{{ request.path }}" name="redirect_url"></div></div>'
+                   '<div class=""><input type="hidden"  id="redirect_url" value='+redirect_url+' name="redirect_url"></div></div>'
                    )
 
                    if(data.is_approved) $("#is_approved").prop('checked',true)
@@ -51,4 +57,27 @@ function removeNulls(key, value) {
 
 function post_form(){
     $("#form_update_user").submit()
+}
+
+
+
+function populate_images(user_id){
+    $.get( "/panel/get_images?user_id="+user_id, function( data ) {
+        data = JSON.parse(data,removeNulls)
+        if(!$.isEmptyObject(data)){
+                   $("#imgModalBody").empty();
+                    for(d in data){
+                   $("#imgModalBody").append('<div class="col-xs-6"><div class="form-group"><img src="'+data[d].img_url+'" alt="User Images" style="width:240px;height:400px;"></div></div></div>')
+                    }
+
+               }
+        else{
+                   $("#imgModalBody").empty();
+                   $("#imgModalBody").append('<div class="alert alert-info alert-dismissable">User has not uploaded any image yet.</div>')
+
+               }
+
+
+
+           });
 }
