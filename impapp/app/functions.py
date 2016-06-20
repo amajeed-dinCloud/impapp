@@ -27,7 +27,7 @@ def make_user_response(user_obj, hide_pass=None):
 
 
 def make_user_images(user_obj):
-    user_images = Document.objects.filter(user=user_obj)
+    user_images = Document.objects.filter(user=user_obj).order_by('type')
     out_list = []
     for image in user_images:
         out_list.append(make_image_dict(image))
