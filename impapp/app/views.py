@@ -35,7 +35,8 @@ def sign_up(request):
                     user_obj.name = name
                     user_obj.city = city
                     if email:
-                        user_obj.email = email
+                        if util_functions.check_email(email):
+                            user_obj.email = email
                         if not fb_id and not ins_id:
                             if not util_functions.check_email(email):
                                 out_dict["message"] = "Please provide a valid email"
