@@ -14,6 +14,4 @@ urlpatterns = [
     url(r'^del_attribute', del_attribute),
     url(r'^get_attrib', get_attrib),
 
-
-
 ]

@@ -8,10 +8,23 @@ from impapp.app.models import User
 from impapp.app.functions import *
 import json
 from impapp import util_functions
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
 
 @login_required
 def is_working(request):
-    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard'},
+    all_user = User.objects.all()
+    paginator = Paginator(all_user, 25)
+    page = request.GET.get('page')
+    try:
+        all_user = paginator.page(page)
+    except PageNotAnInteger:
+        all_user = paginator.page(1)
+    except EmptyPage:
+        all_user = paginator.page(paginator.num_pages)
+
+    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard','all_user': all_user},
                               context_instance=RequestContext(request))
     # return HttpResponse("*IS WORKING*")
 

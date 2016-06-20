@@ -9,16 +9,41 @@
     <link href="/static/admin_panel/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="/static/admin_panel/plugins/pace/pace-theme-big-counter.css" rel="stylesheet" />
     <link href="/static/admin_panel/css/style.css" rel="stylesheet" />
-      <link href="/static/admin_panel/css/main-style.css" rel="stylesheet" />
-
-
-
+    <link href="/static/admin_panel/css/main-style.css" rel="stylesheet" />
 
 </head>
 
-<body class=" pace-done"><div class="pace  pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+<body class=" pace-done">
+    <!-- Core Scripts - Include with every page -->
+    <script src="/static/admin_panel/plugins/jquery-1.10.2.js"></script>
+    <script src="/static/admin_panel/plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="/static/admin_panel/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/admin_panel/plugins/pace/pace.js"></script>
+    <script src="/static/admin_panel/scripts/siminta.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        url = window.location.href;
+        url_parts = url.split("msg=")
+
+        if (url_parts.length>1){
+        msg = decodeURI(url_parts[1])
+        $("#info_div").show()
+        $("#para_info_div").text(msg);
+    }
+    });
+
+
+
+</script>
+
+
+
+<div class="pace  pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
   <div class="pace-progress-inner"></div>
 </div>
+
 <div class="pace-activity"></div></div>
     <!--  wrapper -->
     <div id="wrapper">
@@ -96,14 +121,18 @@
                     <li {% if menu == "dashboard" %}class="selected"{% endif %}>
                         <a href="/"><i class="fa fa-dashboard fa-fw"></i>Dashboard</a>
                     </li>
-                     <li {% if menu == "custom_attributes" %}class="selected"{% endif %}>
-                        <a href="/panel/custom_attributes_list"><i class="fa fa-flask fa-fw"></i>Custom Attributes</a>
+                    <li {% if menu == "pending_user" %}class="selected"{% endif %}>
+                        <a href="/panel/pending_user"><i class="fa fa-edit fa-fw"></i>Pending Users</a>
                     </li>
                     <li {% if menu == "top_ten" %}class="selected"{% endif %}>
                         <a href="/panel/top_ten"><i class="fa fa-table fa-fw"></i>Top 10 Users</a>
                     </li>
+                     <li {% if menu == "custom_attributes" %}class="selected"{% endif %}>
+                        <a href="/panel/custom_attributes_list"><i class="fa fa-flask fa-fw"></i>Custom Attributes</a>
+                    </li>
+
                     <li {% if menu == "refresh_ratings" %}class="selected"{% endif %}>
-                        <a href="/panel/update_all_ratings"><i class="fa fa-edit fa-fw"></i>Refresh Ratings</a>
+                        <a href="/panel/update_all_ratings"><i class="fa fa-question-circle fa-fw"></i>Refresh Ratings</a>
                     </li>
 
                 </ul>
@@ -134,33 +163,6 @@
         {% endblock %}
     </div>
     <!-- end wrapper -->
-
-    <!-- Core Scripts - Include with every page -->
-    <script src="/static/admin_panel/plugins/jquery-1.10.2.js"></script>
-    <script src="/static/admin_panel/plugins/bootstrap/bootstrap.min.js"></script>
-    <script src="/static/admin_panel/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="/static/admin_panel/plugins/pace/pace.js"></script>
-    <script src="/static/admin_panel/scripts/siminta.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-
-        url = window.location.href;
-        url_parts = url.split("msg=")
-
-        if (url_parts.length>1){
-        msg = decodeURI(url_parts[1])
-        $("#info_div").show()
-        $("#para_info_div").text(msg);
-    }
-    });
-
-
-
-</script>
-
-
-
 
 
 </body></html>
