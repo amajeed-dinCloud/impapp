@@ -30,6 +30,9 @@ urlpatterns = [
     url(r'^update_user_image', update_user_image),
     url(r'^top_ten', top_ten),
     url(r'^get_custom_attributes', get_custom_attributes),
+    url(r'^forgot_password', forgot_password),
+
+
 
 ]
 

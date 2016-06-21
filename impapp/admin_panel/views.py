@@ -194,3 +194,30 @@ def get_images(request):
         print ex
 
     return HttpResponse(json.dumps(out_list))
+
+
+from django.db.models import Q
+import operator
+@login_required
+def search_user(request):
+    query_string = request.POST.get('key')
+    fields = request.POST.getlist('field')
+    argument_list = [] #keep this blank, just decalring it for later
+    for query in query_string.split(' '):  #breaks query_string into 'Foo' and 'Bar'
+        for field in fields:
+            argument_list.append( Q(**{field+'__icontains':query}))
+
+    user_list = User.objects.filter( reduce(operator.or_, argument_list))
+    print user_list.query
+    print user_list
+
+        # # --UPDATE-- here's an args example for completeness
+        # order = ['publish_date','title'] #create a list, possibly from GET or POST data
+        # ordered_query = query.order_by(*orders()) # Yay, you're ordered now!
+    return render_to_response('search.html', {'request': request, 'menu': 'refresh_ratings',
+                                              "query_string": query_string,
+                                              "fields": fields,
+                                              "user_list": user_list},
+                              context_instance=RequestContext(request))
+
+

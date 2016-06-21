@@ -467,3 +467,24 @@ def get_custom_attributes(request):
         out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
 
     return HttpResponse(json.dumps(out_dict))
+
+
+@csrf_exempt
+def forgot_password(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    if request.method == "POST":
+        try:
+            email = request.POST['email']
+            user_obj = User.objects.get(email=email)
+            new_password = util_functions.generate_password()
+            user_obj.password = new_password
+            user_obj.save()
+            word_dict = {"[PASSWORD]": user_obj.password, "[NAME]": user_obj.name}
+            util_functions.send_email_extended('forgot_password', [user_obj.email], email_words_dict = word_dict)
+            out_dict = {"code": 200, "status": "ok", "message": "Email has been sent to user."}
+        except Exception, ex:
+            out_dict["message"] = str(ex)
+    else:
+        out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
+
+    return HttpResponse(json.dumps(out_dict))

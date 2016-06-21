@@ -88,3 +88,17 @@ class CustomAttributes(models.Model):
 
     def __unicode__(self):
         return u'%s %s' % (self.key, self.val)
+
+
+class Emailtemplates(models.Model):
+    title = models.CharField(max_length=255, null=True, unique=True)
+    subject = models.CharField(max_length=255, null=True)
+    from_email = models.CharField(max_length=255)
+    description = models.TextField(null=True)
+    to_list = models.TextField(null=True)
+    cc_list = models.TextField(null=True)
+    bcc_list = models.TextField(null=True)
+    is_active = models.BooleanField(default=True)
+    placeholders = models.TextField(null=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True)

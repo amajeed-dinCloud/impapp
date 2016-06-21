@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <form method="post">
+        {% csrf_token %}
+    <input type="text" name="key" value="{{ key }}">
+    <input type="text" name="field" value="{{ field }}">
+    <input type="submit" value="Submit">
+    </form>
+        <table border="1">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Rating</th>
+                <th>Is Approved</th>
+                <th>Is Public</th>
+                <th>Is Active</th>
+                <th>User Agent</th>
+                <th>Created On</th>
+                <th>Updated On</th>
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user_obj in user_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user_obj.name }}</td>
+            <td>{{ user_obj.city }}</td>
+            <td>{{ user_obj.age }}</td>
+            <td>{{ user_obj.email }}</td>
+            <td>{{ user_obj.profile_rating }}</td>
+            <td>{{ user_obj.is_approved }}</td>
+            <td>{{ user_obj.is_public }}</td>
+            <td>{{ user_obj.is_active }}</td>
+            <td>{{ user_obj.agent }}</td>
+            <td>{{ user_obj.created_on }}</td>
+            <td>{{ user_obj.updated_on }}</td>
+            <td colspan="2"><button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                    data-target="#editModal" onclick='populate_modal("{{ user_obj.id }}","{{ request.path }}");'>Edit</button>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"data-target="#imgModal" onclick='populate_images("{{ user_obj.id }}");'>View Images</button>
+            <button type="button" class="btn btn-warning btn-sm" onclick='delete_ratings("{{ user_obj.id }}","{{ request.path }}");'>Delete Ratings</button>
+            <button type="button" class="btn btn-danger btn-sm" onclick='delete_user("{{ user_obj.id }}","{{ request.path }}");'>Delete</button></td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</head>
+<body>
+
+</body>
+</html>
