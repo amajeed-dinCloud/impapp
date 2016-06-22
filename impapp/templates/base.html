@@ -11,6 +11,7 @@
     <link href="/static/admin_panel/css/style.css" rel="stylesheet" />
     <link href="/static/admin_panel/css/main-style.css" rel="stylesheet" />
 
+
 </head>
 
 <body class=" pace-done">
@@ -55,14 +56,11 @@
                 <a class="navbar-brand" href="/">
                     <img src="/static/admin_panel/imgs/logo.png" alt="" />
                 </a>
-                <span>It is {% now "SHORT_DATETIME_FORMAT" %}</span>
+
             </div>
-{#        <div class="navbar-header col-md-3 col-md-offset-3">#}
-{#            <div class="alert alert-info alert-dismissable">#}
-{#                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>#}
-{#                Lorem ipsum dolor sit amet, consectetur adipisicing elit.#}
-{#            </div>#}
-{#        </div>#}
+        <div class="navbar-header col-md-2 col-md-offset-9">
+            <span>Server Time: {% now "SHORT_DATETIME_FORMAT" %}</span>
+        </div>
             <!-- end navbar-header -->
             <ul class="nav navbar-top-links navbar-right">
                 <!-- main dropdown -->
@@ -121,8 +119,11 @@
                     <li {% if menu == "dashboard" %}class="selected"{% endif %}>
                         <a href="/"><i class="fa fa-dashboard fa-fw"></i>Dashboard</a>
                     </li>
-                    <li {% if menu == "pending_user" %}class="selected"{% endif %}>
-                        <a href="/panel/pending_user"><i class="fa fa-edit fa-fw"></i>Pending Users</a>
+                    <li {% if menu == "all_users" %}class="selected"{% endif %}>
+                            <a href="/panel/all_users"><i class="fa fa-dashboard fa-fw"></i>All Users</a>
+                    </li>
+                    <li {% if menu == "pending_users" %}class="selected"{% endif %}>
+                        <a href="/panel/pending_users"><i class="fa fa-edit fa-fw"></i>Pending Users</a>
                     </li>
                     <li {% if menu == "top_ten" %}class="selected"{% endif %}>
                         <a href="/panel/top_ten"><i class="fa fa-table fa-fw"></i>Top 10 Users</a>
@@ -150,7 +151,7 @@
                 <div class=" col-md-3 col-md-offset-3 col-lg-6" style="padding-top: 40px; display: none;" id="info_div">
                     <div class="alert alert-warning alert-dismissable">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <p id="para_info_div">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        <p id="para_info_div"></p>
                     </div>
 
                 </div>

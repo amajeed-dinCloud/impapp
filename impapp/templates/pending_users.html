@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <script src="/static/admin_panel/scripts/userOperations.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('#check_all').click(function(event) {
+  if(this.checked) {
+      // Iterate each checkbox
+      $(':checkbox').each(function() {
+          this.checked = true;
+      });
+  }
+  else {
+    $(':checkbox').each(function() {
+          this.checked = false;
+      });
+  }
+});
+
+if ('{{ msg }}'.length>1){
+    $("#info_div").show()
+    $("#para_info_div").text('{{ msg }}');
+}
+
+
+
+
+})
+
+function post_form(path) {
+    if (confirm("Are you sure you want to approve selected users")){
+var form = $('<form></form>');
+
+form.attr("method", "post");
+form.attr("action", path);
+
+$(".inner_check_box").each(function() {
+
+    if(this.checked){
+        var field = $('<input></input>');
+
+        field.attr("type", "hidden");
+        field.attr("name", this.name);
+        field.attr("value", this.value);
+
+        form.append(field);
+}});
+// The form needs to be a part of the document in
+// order for us to be able to submit it.
+$(document.body).append(form);
+form.submit();
+}
+}
+
+    </script>
+
+        <div id="page-wrapper">
+
+            <div class="row">
+                <!-- Page Header -->
+                <div class="col-lg-12">
+                    <h1 class="page-header">Pending Users</h1>
+
+                </div>
+                <!--End Page Header -->
+                <div class="col-lg-12">
+                     <!--    Context Classes  -->
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            Users List
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>City</th>
+                                            <th>Age</th>
+                                            <th>Email</th>
+                                            <th>Rating</th>
+                                            <th>Is Approved</th>
+                                            <th>Is Public</th>
+                                            <th>Is Active</th>
+                                            <th>User Agent</th>
+                                            <th>Created On</th>
+                                            <th>Updated On</th>
+                                            <th><label class="checkbox-inline"><input type="checkbox" id="check_all">Approve</label></td></th>
+                                            <th colspan="2">Actions <button type="button" class="btn btn-primary btn-sm" onclick="post_form('/panel/pending_users')">Approve Selected</button></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for user_obj in all_users %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ user_obj.name }}</td>
+                                        <td>{{ user_obj.city }}</td>
+                                        <td>{{ user_obj.age }}</td>
+                                        <td>{{ user_obj.email }}</td>
+                                        <td>{{ user_obj.profile_rating }}</td>
+                                        <td>{{ user_obj.is_approved }}</td>
+                                        <td>{{ user_obj.is_public }}</td>
+                                        <td>{{ user_obj.is_active }}</td>
+                                        <td>{{ user_obj.agent }}</td>
+                                        <td>{{ user_obj.created_on }}</td>
+                                        <td>{{ user_obj.updated_on }}</td>
+                                        <td><label class="checkbox-inline">
+                                                <input class= "inner_check_box" type="checkbox" value="{{ user_obj.id }}" name="user_id">
+                                            </label></td>
+                                        <td colspan="2"><button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                                data-target="#editModal" onclick='populate_modal("{{ user_obj.id }}","{{ request.path }}");'>Edit</button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"data-target="#imgModal" onclick='populate_images("{{ user_obj.id }}");'>View Images</button>
+{#                                        <button type="button" class="btn btn-warning btn-sm" onclick='delete_ratings("{{ user_obj.id }}","{{ request.path }}");'>Delete Ratings</button>#}
+                                        <button type="button" class="btn btn-danger btn-sm" onclick='delete_user("{{ user_obj.id }}","{{ request.path }}");'>Delete</button></td>
+
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h4 class="modal-title" id="myModalLabel">Edit User</h4>
+                                        </div>
+
+                                    <form role="form" method="post" action="/panel/update_user" id="form_update_user">
+                                        {% csrf_token %}
+                                        <div class="modal-body" id="editModalBody">
+
+
+                                            </div>
+
+                                        <div class="modal-footer" id="editModalFooter">
+
+                                            </div>
+
+                                    </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="imgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content col-lg-12">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h4 class="modal-title" id="myModalLabel">User Images</h4>
+                                        </div>
+
+                                        {% csrf_token %}
+                                        <div class="modal-body" id="imgModalBody">
+                                            <div class="container" id="imgsDiv">
+
+                                        </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!--  end  Context Classes  -->
+                </div>
+            </div>
+
+
+
+        </div>
+        <!-- end page-wrapper -->
+
+
+{% endblock %}
+

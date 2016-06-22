@@ -7,6 +7,12 @@ Author: http://binarytheme.com
 ======================================*/
 
 /* user image section */
+.inline {
+    display:inline-block;
+    padding-top: 10px;
+    padding-left: 5px;
+}
+
 .user-section {
     margin-top:20px;
     font-size:22px;

@@ -12,10 +12,18 @@ from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 import traceback
-from collections import OrderedDict
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 @login_required
-def is_working(request):
+def dashboard(request):
+    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard'},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def all_users(request):
     try:
         query_string = request.GET.get('query_string')
         fields = request.GET.getlist('fields')
@@ -31,7 +39,7 @@ def is_working(request):
             all_user = all_user.filter( reduce(operator.or_, argument_list))
             print all_user.query
 
-        page_size = 25
+        page_size = 20
         paginator = Paginator(all_user, page_size)
         page = request.GET.get('page')
         try:
@@ -45,7 +53,7 @@ def is_working(request):
                             'agent': 'Agent', 'profile_rating': 'Profile Rating', 'is_approved': 'Is Approved',
                             'is_public': 'Is Public', 'is_active': 'Is Active'}
 
-        return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard', 'all_user': all_user,
+        return render_to_response('all_users.html', {'request': request, 'menu': 'all_users', 'all_user': all_user,
                                                      'selection_fields': selection_fields, "page_size": page_size ,
                                                      "query_string": query_string,"fields": fields },
                                   context_instance=RequestContext(request))
@@ -221,28 +229,24 @@ def get_images(request):
     return HttpResponse(json.dumps(out_list))
 
 
-from django.db.models import Q
-import operator
+@csrf_exempt
 @login_required
-def search_user(request):
-    query_string = request.GET.get('query_string','ayr')
-    fields = request.GET.getlist('field','email')
-    argument_list = [] #keep this blank, just decalring it for later
-    for query in query_string.split(' '):  #breaks query_string into 'Foo' and 'Bar'
-        for field in fields:
-            argument_list.append( Q(**{field+'__icontains':query}))
-
-    user_list = User.objects.filter( reduce(operator.or_, argument_list))
-    print user_list.query
-    print user_list
-
-        # # --UPDATE-- here's an args example for completeness
-        # order = ['publish_date','title'] #create a list, possibly from GET or POST data
-        # ordered_query = query.order_by(*orders()) # Yay, you're ordered now!
-    return render_to_response('search.html', {'request': request, 'menu': 'refresh_ratings',
-                                              "query_string": query_string,
-                                              "fields": fields,
-                                              "user_list": user_list},
-                              context_instance=RequestContext(request))
+def pending_users(request):
+    try:
+        msg = ''
+        msg_type = ''
+        if request.method=="POST":
+            user_ids = request.POST.getlist('user_id')
+            if not user_ids:
+                msg = "No user has been selected"
+            else:
+                User.objects.filter(id__in=user_ids).update(is_approved=1)
+                msg = "User(s) have been updated."
+        all_users = User.objects.filter(is_approved=0).order_by('-created_on')
+        return render_to_response('pending_users.html', {'request': request, 'menu': 'pending_users',
+                                                             'all_users': all_users,"msg":msg,'msg_type': msg_type},
+                                  context_instance=RequestContext(request))
+    except:
+        print traceback.print_exc(5)
 
 

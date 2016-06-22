@@ -55,10 +55,6 @@ function removeNulls(key, value) {
     return value;
 }
 
-function post_form(){
-    $("#form_update_user").submit()
-}
-
 
 
 function populate_images(user_id){

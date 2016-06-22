@@ -18,14 +18,14 @@ from django.conf.urls.static import static
 import settings
 from impapp.app.views import redirect_insta
 from django.contrib import admin
-from impapp.admin_panel.views import is_working
+from impapp.admin_panel.views import dashboard
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^service/',include('impapp.app.urls')),
     url(r'^panel/',include('impapp.admin_panel.urls')),
-    url(r'^$', is_working),
+    url(r'^$', dashboard),
     url(r'^redirect_insta',redirect_insta),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'admin/login.html'}),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
