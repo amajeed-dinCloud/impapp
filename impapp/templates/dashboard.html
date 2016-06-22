@@ -13,6 +13,7 @@
     <script src="/static/admin_panel/scripts/userOperations.js?v=2"></script>
         <div id="page-wrapper">
 
+
             <div class="row">
                 <!-- Page Header -->
                 <div class="col-lg-12">
@@ -20,7 +21,46 @@
 
                 </div>
                 <!--End Page Header -->
+                            <div class="col-md-3 col-md-offset-3 col-lg-4">
+                     <!--    Context Classes  -->
+                    <div class="panel panel-primary">
+
+                        <div class="panel-heading">
+                            Search User
+                        </div>
+
+                        <div class="panel-body">
+                            <form role="form" method="get">
+                                        <div class="form-group">
+                                            <input class="form-control" placeholder="Enter search word" name="query_string" id="query_string" required="required" {% if query_string %}value="{{ query_string }}"{% endif %}>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <select class="form-control" name="fields">
+                                                {% for q_val, q_str in selection_fields.items %}
+                                                <option value="{{ q_val }}"
+                                                        {% if fields %}{% for fld in fields %}{% if q_val == fld %}
+                                                        selected="selected"{% endif %}
+                                                        {% endfor %}{% else %}{% if q_val == "email" %}selected{% endif %}{% endif %}>{{ q_str }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+
+
+                                        <input type="hidden"  id="redirect_url" value="{{ request.path }}" name="redirect_url">
+                                            <button type="submit" class="btn btn-primary col-md-3 col-md-offset-4">Search</button>
+                            </form>
+
+                        </div>
+                    </div>
+                    <!--  end  Context Classes  -->
+                </div>
+
+
+
             </div>
+
 
 
         <div class="row">
@@ -131,7 +171,7 @@
                 <ul class="pagination">
                 {% if all_user.has_previous %}
                 <li>
-                <span><a href="?page={{ all_user.previous_page_number }}">Previous</a></span>
+                <span><a href="?page={{ all_user.previous_page_number }}&query_string={{ query_string }}{% for field in fields  %}&fields={{ fields }}{% endfor %}">Previous</a></span>
                 </li>
                 {% endif %}
                 <li class="">
@@ -139,7 +179,7 @@
                 </li>
                 {% if all_user.has_next %}
                 <li>
-                <span><a href="?page={{ all_user.next_page_number }}">Next</a></span>
+                <span><a href="?page={{ all_user.next_page_number }}&query_string={{ query_string }}{% for field in fields  %}&fields={{ fields }}{% endfor %}">Next</a></span>
                 </li>
                 {% endif %}
                 </ul>

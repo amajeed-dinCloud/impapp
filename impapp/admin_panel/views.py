@@ -11,22 +11,47 @@ from impapp import util_functions
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
+import traceback
+from collections import OrderedDict
 
 @login_required
 def is_working(request):
-    all_user = User.objects.all()
-    page_size = 25
-    paginator = Paginator(all_user, page_size)
-    page = request.GET.get('page')
     try:
-        all_user = paginator.page(page)
-    except PageNotAnInteger:
-        all_user = paginator.page(1)
-    except EmptyPage:
-        all_user = paginator.page(paginator.num_pages)
+        query_string = request.GET.get('query_string')
+        fields = request.GET.getlist('fields')
+        print request
+        argument_list = []
+        if query_string and fields:
+            for query in query_string.split(' '):
+                for field in fields:
+                    argument_list.append(Q(**{field+'__icontains': query}))
 
-    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard','all_user': all_user,
-                                                 "page_size": page_size}, context_instance=RequestContext(request))
+        all_user = User.objects.all()
+        if query_string and fields:
+            all_user = all_user.filter( reduce(operator.or_, argument_list))
+            print all_user.query
+
+        page_size = 25
+        paginator = Paginator(all_user, page_size)
+        page = request.GET.get('page')
+        try:
+            all_user = paginator.page(page)
+        except PageNotAnInteger:
+            all_user = paginator.page(1)
+        except EmptyPage:
+            all_user = paginator.page(paginator.num_pages)
+
+        selection_fields = {'name': 'Name', 'id': 'Id', 'city': 'City', 'age': 'Age', 'email': 'Email',
+                            'agent': 'Agent', 'profile_rating': 'Profile Rating', 'is_approved': 'Is Approved',
+                            'is_public': 'Is Public', 'is_active': 'Is Active'}
+
+        return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard', 'all_user': all_user,
+                                                     'selection_fields': selection_fields, "page_size": page_size ,
+                                                     "query_string": query_string,"fields": fields },
+                                  context_instance=RequestContext(request))
+    except Exception, ex:
+        print traceback.print_exc(5)
+        print str(ex)
 
 
 @login_required
@@ -200,8 +225,8 @@ from django.db.models import Q
 import operator
 @login_required
 def search_user(request):
-    query_string = request.POST.get('key')
-    fields = request.POST.getlist('field')
+    query_string = request.GET.get('query_string','ayr')
+    fields = request.GET.getlist('field','email')
     argument_list = [] #keep this blank, just decalring it for later
     for query in query_string.split(' '):  #breaks query_string into 'Foo' and 'Bar'
         for field in fields:
