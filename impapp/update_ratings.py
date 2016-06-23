@@ -17,7 +17,7 @@ def refresh_ratings():
         print "Executing Query."
         cursor.execute(query)
         updated_rows = cursor.rowcount
-        print "Row(s) were updated :" + str(updated_rows)
+        print "No of user were updated :" + str(updated_rows)
         conn.commit()
         cursor.close()
         conn.close()
