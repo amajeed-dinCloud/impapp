@@ -70,14 +70,14 @@ def update_all_ratings(request):
 
 @login_required
 def custom_attributes_list(request):
-    attrib_list = CustomAttributes.objects.all()
+    attrib_list = CustomAttributes.objects.all().order_by('-updated_on')
     return render_to_response('custom_attributes.html', {'request': request, 'menu': 'custom_attributes',
                                                          "attrib_list":attrib_list},
                               context_instance=RequestContext(request))
 
 @login_required
 def top_ten(request):
-    top_ten_users = User.objects.filter(is_approved=1, is_public=1, is_active=1).order_by('-profile_rating')[:10]
+    top_ten_users = get_top_10_users()
     return render_to_response('top_ten.html', {'request': request, 'menu': 'top_ten',
                                                          'top_ten_users': top_ten_users},
                               context_instance=RequestContext(request))

@@ -20,6 +20,7 @@ class User(models.Model):
     agent = models.CharField(max_length=20, null=True, blank=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)
+    vote_count = models.IntegerField(default=0)
 
     def __unicode__(self):
         return u'%s %s' % (self.name, self.email)

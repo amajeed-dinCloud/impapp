@@ -69,3 +69,17 @@ def is_user_exists(email, fb_id, ins_id):
 def make_cus_attr_dict(cus_obj):
     out_dict = {"id": cus_obj.id, "val": cus_obj.val, "desc": cus_obj.desc, "key": cus_obj.key}
     return out_dict
+
+
+def get_top_10_users():
+    custom_attr = CustomAttributes.objects.filter(key='top_ten_min_votes')
+    vote_limit = 1
+    try:
+        vote_limit = int(custom_attr[0].val) if custom_attr else 1
+    except Exception,ex:
+        print ex
+
+    top_ten_users = User.objects.filter(is_approved=1, is_public=1, is_active=1, vote_count__gte=vote_limit
+                                                ).order_by('-vote_count').order_by('-profile_rating')[:10]
+
+    return top_ten_users

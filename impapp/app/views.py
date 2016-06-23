@@ -9,6 +9,8 @@ from impapp import util_functions
 from impapp import configs as conf
 from impapp.app.functions import *
 from django.core.paginator import Paginator
+import datetime
+from django.db.models import Count
 
 @csrf_exempt
 def sign_up(request):
@@ -424,7 +426,7 @@ def update_user_image(request):
 
     return HttpResponse(json.dumps(out_dict))
 
-import datetime
+
 @csrf_exempt
 def top_ten(request):
     out_dict = {"code": 500, "status": "error", "message": ""}
@@ -436,9 +438,8 @@ def top_ten(request):
             hours, remainder = divmod(diff.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             counter = {"days": diff.days, "hours": hours, "minutes": minutes, "seconds": seconds}
-
+            user_profiles = get_top_10_users()
             final_result = []
-            user_profiles = User.objects.filter(is_approved=1, is_public=1, is_active=1).order_by('-profile_rating')[:10]
             for res in user_profiles:
                 final_result.append(make_user_response(res, hide_pass=True))
             out_dict = {"code": 200, "status": "ok", "message": "", "user_profiles": final_result, "counter": counter}
@@ -447,7 +448,7 @@ def top_ten(request):
     else:
         out_dict = {"code": 405, "status": "error", "message": "Method not allowed."}
 
-    return HttpResponse(json.dumps(out_dict))
+    return HttpResponse(json.dumps(out_dict), content_type="application/json")
 
 
 
