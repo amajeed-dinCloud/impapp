@@ -103,3 +103,11 @@ class Emailtemplates(models.Model):
     placeholders = models.TextField(null=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)
+
+
+class Contests(models.Model):
+    name = models.CharField(max_length=255, null=True, unique=True)
+    end_date = models.DateTimeField()
+    top_ten = models.TextField(null=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True)

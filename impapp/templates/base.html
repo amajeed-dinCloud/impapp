@@ -132,6 +132,10 @@
                         <a href="/panel/custom_attributes_list"><i class="fa fa-flask fa-fw"></i>Custom Attributes</a>
                     </li>
 
+                <li {% if menu == "contests" %}class="selected"{% endif %}>
+                        <a href="/panel/contests"><i class="fa fa-flask fa-fw"></i>Contests</a>
+                </li>
+
                     <li {% if menu == "refresh_ratings" %}class="selected"{% endif %}>
                         <a href="/panel/update_all_ratings"><i class="fa fa-question-circle fa-fw"></i>Refresh Ratings</a>
                     </li>

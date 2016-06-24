@@ -82,6 +82,12 @@ def top_ten(request):
                                                          'top_ten_users': top_ten_users},
                               context_instance=RequestContext(request))
 
+def contests(request):
+    contest_list = Contests.objects.all()
+    return render_to_response('contests.html', {'request': request, 'menu': 'contests', 'contest_list': contest_list},
+                              context_instance=RequestContext(request))
+
+
 def del_user(request):
     try:
         redirect_url = request.GET["redirect_url"]

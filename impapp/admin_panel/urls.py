@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^update_all_ratings', update_all_ratings),
     url(r'^custom_attributes_list', custom_attributes_list),
     url(r'^top_ten', top_ten),
+    url(r'^contests', contests),
     url(r'^all_users', all_users),
     url(r'^pending_users', pending_users),
     url(r'^del_user', del_user),
