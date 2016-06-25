@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block main_content %}
-    <link href="/static/admin_panel/css/custom.css" rel="stylesheet" />
     <script type="text/javascript">
     function make_page_number(counter,page_size,page_num){
         if (page_num==1){
@@ -25,157 +24,39 @@
 
 
 
-            <div class="row">
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3>
-                                9429                </h3>
-                            <p>
-                                Total Trips
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3>
-                                1289                </h3>
-                            <p>
-                                Completed Service Receiveds
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3>
-                                8140                </h3>
-                            <p>
-                                Cancelled Service Receiveds
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-purple">
-                        <div class="inner">
-                            <h3>
-                                $ 1126003.15                </h3>
-                            <p>
-                                Total Payment
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3>
-                                $ 2372.82                </h3>
-                            <p>
-                                Card Payment
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-maroon">
-                        <div class="inner">
-                            <h3>
-                                $ 55.00                </h3>
-                            <p>
-                                Referral Payment
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3>
-                                $ 1123400.23                </h3>
-                            <p>
-                                Cash Payment
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3>
-                                $ 175.10                </h3>
-                            <p>
-                                Promotional Payment
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                <div class="col-lg-4 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3>
-                                6                </h3>
-                            <p>
-                                Total Schedules
-                            </p>
-                        </div>
-                        <div class="icon">
-                                            <i class="fa"></i>
-                        </div>
-
-                    </div>
-                </div><!-- ./col -->
-                </div>
-
-
 
         <div class="row">
-            <div class="col-lg-6">
+            <!-- End Area Chart -->
+<div class="row">
+                <!--quick info section -->
+                <div class="col-lg-3">
+                    <div class="alert alert-danger text-center">
+                        <i class="fa fa-calendar fa-3x"></i>&nbsp;<b>20 </b>Meetings Sheduled This Month
+
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="alert alert-success text-center">
+                        <i class="fa  fa-beer fa-3x"></i>&nbsp;<b>27 % </b>Profit Recorded in This Month
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="alert alert-info text-center">
+                        <i class="fa fa-rss fa-3x"></i>&nbsp;<b>1,900</b> New Subscribers This Year
+
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="alert alert-warning text-center">
+                        <i class="fa  fa-pencil fa-3x"></i>&nbsp;<b>2,000 $ </b>Payment Dues For Rejected Items
+                    </div>
+                </div>
+                <!--end quick info section -->
+            </div>
+            </div>
+
+<div class="row">
+                <div class="col-lg-6">
             <!--  Area Chart -->
             <div class="panel panel-default">
             <div class="panel-heading">
@@ -195,9 +76,6 @@
             </div>
             </div>
                 </div>
-            <!-- End Area Chart -->
-
-
 
         <div class="col-lg-6">
                      <!--  Donut Chart -->
@@ -211,6 +89,7 @@
                     </div>
                     <!-- End Donut Chart -->
                 </div>
+
         </div>
 
 

@@ -5,9 +5,15 @@
     <script src="/static/admin_panel/scripts/moment-with-locales.js"></script>
     <script src="/static/admin_panel/scripts/bootstrap-datetimepicker.js"></script>
     <link href="/static/admin_panel/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-{#    <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />#}
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/admin_panel/css/other_css.css" />
         <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker').datetimepicker({
+                     minDate: moment()
 
+
+                });
+            });
         </script>
         <div id="page-wrapper">
 
@@ -19,26 +25,40 @@
                 <!--End Page Header -->
                 <div class="col-lg-12">
 
-<div class="container">
-    <div class="row">
-        <div class='col-sm-4'>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker2'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+                     <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            Update Contest Ending Time
+                        </div>
+
+                        <div class="panel-body">
+                            <form role="form" action="/panel/contests" method="post">
+                                {% csrf_token %}
+                                <div class="form-group col-sm-3">
+                                                <div class='input-group date' id='datetimepicker'>
+                                                    <input type='text' class="form-control" style="pointer-events: none;" name="contest_ending_date"/>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                <div class="form-group  col-sm-3">
+                                    <button type="submit" class="btn btn-primary col-md-3">Update</button>
+                                </div>
+
+
+                            </form>
+
+                    <div class="col-md-4">
+                    <div class="alert alert-danger text-center">
+                        <i class="fa fa-calendar fa-2x"></i>&nbsp;Contest ends in {{ counter.days }} day(s), {{ counter.hours }} hour(s), {{ counter.minutes }} minutes and {{ counter.seconds }} seconds.
+
+                    </div>
                 </div>
-            </div>
-        </div>
-        <script type="text/javascript">
-            $(function () {
-                $('#datetimepicker2').datetimepicker({
-                    useCurrent: false
-                });
-            });
-        </script>
-    </div>
+
+                        </div>
+                    </div>
+
 </div>
                      <!--    Context Classes  -->
                     <div class="panel panel-default">
@@ -121,11 +141,11 @@
                     </div>
                     <!--  end  Context Classes  -->
                 </div>
+
+
+
             </div>
 
-
-
-        </div>
         <!-- end page-wrapper -->
 
 

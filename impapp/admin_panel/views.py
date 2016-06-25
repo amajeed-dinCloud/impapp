@@ -13,6 +13,7 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 import traceback
 from django.views.decorators.csrf import csrf_exempt
+from impapp.app import functions as app_func
 
 
 
@@ -70,7 +71,7 @@ def update_all_ratings(request):
 
 @login_required
 def custom_attributes_list(request):
-    attrib_list = CustomAttributes.objects.all().order_by('-updated_on')
+    attrib_list = CustomAttributes.objects.all().exclude(key='contest_ending_date').order_by('-updated_on')
     return render_to_response('custom_attributes.html', {'request': request, 'menu': 'custom_attributes',
                                                          "attrib_list":attrib_list},
                               context_instance=RequestContext(request))
@@ -82,10 +83,29 @@ def top_ten(request):
                                                          'top_ten_users': top_ten_users},
                               context_instance=RequestContext(request))
 
+
 def contests(request):
-    contest_list = Contests.objects.all()
-    return render_to_response('contests.html', {'request': request, 'menu': 'contests', 'contest_list': contest_list},
-                              context_instance=RequestContext(request))
+    try:
+        if request.method == 'POST':
+            contest_end_date = request.POST.get('contest_ending_date')
+            if contest_end_date:
+                ca_end_date = CustomAttributes.objects.filter(key='contest_ending_date')
+                if ca_end_date:
+                    ca_end_date[0].val = contest_end_date
+                    ca_end_date[0].save()
+                else:
+                    desc ="contest will be end on this date and ratings will be marked zero"
+                    CustomAttributes.objects.create(desc=desc,key='contest_ending_date',val=contest_end_date)
+
+        counter = app_func.get_contest_counter()
+        contest_list = Contests.objects.all()
+
+        return render_to_response('contests.html', {'request': request, 'menu': 'contests', 'counter':counter,
+                                                    'contest_list': contest_list},
+                                  context_instance=RequestContext(request))
+    except Exception,ex:
+        print str(ex)
+        print traceback.print_exc(5)
 
 
 def del_user(request):

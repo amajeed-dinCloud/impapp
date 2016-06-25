@@ -432,12 +432,7 @@ def top_ten(request):
     out_dict = {"code": 500, "status": "error", "message": ""}
     if request.method == "GET":
         try:
-            current_time = datetime.datetime.now()
-            end_date = current_time+datetime.timedelta(days=2, hours=3, minutes=10)
-            diff = end_date-current_time
-            hours, remainder = divmod(diff.seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            counter = {"days": diff.days, "hours": hours, "minutes": minutes, "seconds": seconds}
+            counter = get_contest_counter()
             user_profiles = get_top_10_users()
             final_result = []
             for res in user_profiles:

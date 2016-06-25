@@ -1,7 +1,8 @@
 __author__ = 'Abdul'
 from impapp.app.models import *
 from impapp import configs as conf
-
+import traceback
+import datetime
 
 def update_profile_image_internal(user_obj, img_id):
     user_images = Document.objects.filter(user=user_obj)
@@ -83,3 +84,22 @@ def get_top_10_users():
                                                 ).order_by('-vote_count').order_by('-profile_rating')[:10]
 
     return top_ten_users
+
+
+def get_contest_counter():
+    contest_end_date = CustomAttributes.objects.filter(key='contest_ending_date')
+    counter = {"days": 0, "hours": 0, "minutes": 0, "seconds": 0}
+    try:
+        if contest_end_date:
+            contest_end_date = contest_end_date[0].val
+            end_date = datetime.datetime.strptime(contest_end_date, '%m/%d/%Y  %I:%M %p')
+            current_time = datetime.datetime.now()
+            diff = end_date-current_time
+            if diff.total_seconds() > 0:
+                hours, remainder = divmod(diff.seconds, 3600)
+                minutes, seconds = divmod(remainder, 60)
+                counter = {"days": diff.days, "hours": hours, "minutes": minutes, "seconds": seconds}
+    except Exception,ex:
+        print str(ex)
+        print traceback.print_exc(5)
+    return counter
