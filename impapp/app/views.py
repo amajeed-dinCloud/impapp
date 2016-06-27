@@ -432,12 +432,12 @@ def top_ten(request):
     out_dict = {"code": 500, "status": "error", "message": ""}
     if request.method == "GET":
         try:
-            counter = get_contest_counter()
             user_profiles = get_top_10_users()
             final_result = []
             for res in user_profiles:
                 final_result.append(make_user_response(res, hide_pass=True))
-            out_dict = {"code": 200, "status": "ok", "message": "", "user_profiles": final_result, "counter": counter}
+            out_dict = {"code": 200, "status": "ok", "message": "", "user_profiles": final_result,
+                        "counter": get_contest_counter()}
         except Exception, ex:
             out_dict["message"] = str(ex)
     else:

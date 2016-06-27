@@ -106,8 +106,7 @@ class Emailtemplates(models.Model):
 
 
 class Contests(models.Model):
-    name = models.CharField(max_length=255, null=True, unique=True)
-    end_date = models.DateTimeField()
+    end_date = models.DateTimeField(null=False, unique=True)
     top_ten = models.TextField(null=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)

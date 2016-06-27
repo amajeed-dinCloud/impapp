@@ -82,6 +82,7 @@ def get_top_10_users():
 
     top_ten_users = User.objects.filter(is_approved=1, is_public=1, is_active=1, vote_count__gte=vote_limit
                                                 ).order_by('-vote_count').order_by('-profile_rating')[:10]
+    print top_ten_users.query
 
     return top_ten_users
 
@@ -103,3 +104,14 @@ def get_contest_counter():
         print str(ex)
         print traceback.print_exc(5)
     return counter
+
+
+def get_old_top_users():
+    top_ten_user = []
+    counter = get_contest_counter()
+    if not counter['days'] and not counter['hours'] and not counter['minutes'] and not counter['seconds']:
+        last_contest = Contests.objects.latest('id')
+        last_users = last_contest.top_ten
+        top_ten_user = User.objects.filter(id__in=last_users).order_by('-vote_count').order_by('-profile_rating')[:10]
+
+    return top_ten_user
