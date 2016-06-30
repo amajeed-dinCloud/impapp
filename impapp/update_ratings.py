@@ -51,11 +51,11 @@ def refresh_ratings():
                     top_ten = cursor.fetchall()
 
                     update_rating_q = "UPDATE app_user SET profile_rating=0,vote_count=0;"
-                    # cursor.execute(update_rating_q)
+                    cursor.execute(update_rating_q)
 
                     print "No of profiles(rating) updated: " + str(cursor.rowcount)
                     del_rating_table_q = "truncate app_ratings;"
-                    # cursor.execute(del_rating_table_q)
+                    cursor.execute(del_rating_table_q)
                     top_ten = json.dumps(list(top_ten))
                     cursor.execute("insert into app_contests (end_date, top_ten,updated_on,created_on)values(%s, %s, %s, %s)",
                                    (end_date, top_ten, current_time, current_time))
