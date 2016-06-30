@@ -2,6 +2,7 @@ __author__ = 'Abdul'
 import MySQLdb
 import settings
 import datetime
+import json
 
 
 def refresh_ratings():
@@ -25,8 +26,12 @@ def refresh_ratings():
             diff = end_date-current_time
             print diff.total_seconds()
             if diff.total_seconds() > 0:
-                query = "UPDATE app_user SET profile_rating=(SELECT AVG(rating) FROM app_ratings" \
-                        " WHERE app_user.id = app_ratings.rated_profile_id);"
+            # if 1:
+                query = "UPDATE app_user t1 " \
+                        "JOIN (SELECT rated_profile_id AS id,AVG(rating) AS ratings, COUNT(rated_profile_id) AS votes " \
+                        "FROM app_ratings t2 GROUP BY rated_profile_id)t2 ON t1.id = t2.id " \
+                        "SET t1.profile_rating = t2.ratings,t1.vote_count = t2.votes;"
+
                 print "Executing Query."
                 cursor.execute(query)
                 updated_rows = cursor.rowcount
@@ -35,7 +40,7 @@ def refresh_ratings():
                 check_query = "SELECT * FROM app_contests WHERE end_date = '%s'"%(end_date)
                 cursor.execute(check_query)
                 if cursor.rowcount == 0:
-                    vote_count_limit_q ="SELECT val FROM app_customattributes ca WHERE ca.key='top_ten_min_votes';"
+                    vote_count_limit_q = "SELECT val FROM app_customattributes ca WHERE ca.key='top_ten_min_votes';"
                     cursor.execute(vote_count_limit_q)
                     vote_limit = cursor.fetchone()
                     vote_limit = vote_limit[0] if vote_limit else 1
@@ -46,12 +51,12 @@ def refresh_ratings():
                     top_ten = cursor.fetchall()
 
                     update_rating_q = "UPDATE app_user SET profile_rating=0,vote_count=0;"
-                    cursor.execute(update_rating_q)
+                    # cursor.execute(update_rating_q)
 
                     print "No of profiles(rating) updated: " + str(cursor.rowcount)
                     del_rating_table_q = "truncate app_ratings;"
-                    cursor.execute(del_rating_table_q)
-                    top_ten = str(list(top_ten))
+                    # cursor.execute(del_rating_table_q)
+                    top_ten = json.dumps(list(top_ten))
                     cursor.execute("insert into app_contests (end_date, top_ten,updated_on,created_on)values(%s, %s, %s, %s)",
                                    (end_date, top_ten, current_time, current_time))
                     print "Contest has been added successfully."

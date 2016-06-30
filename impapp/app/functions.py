@@ -3,6 +3,7 @@ from impapp.app.models import *
 from impapp import configs as conf
 import traceback
 import datetime
+import json
 
 def update_profile_image_internal(user_obj, img_id):
     user_images = Document.objects.filter(user=user_obj)
@@ -73,16 +74,30 @@ def make_cus_attr_dict(cus_obj):
 
 
 def get_top_10_users():
-    custom_attr = CustomAttributes.objects.filter(key='top_ten_min_votes')
-    vote_limit = 1
-    try:
-        vote_limit = int(custom_attr[0].val) if custom_attr else 1
-    except Exception,ex:
-        print ex
+    counter = get_contest_counter()
+    if counter['days'] == 0 and counter['hours'] == 0 and counter['minutes'] == 0 and counter['seconds'] == 0:
+        contest = Contests.objects.latest('id')
+        contest_users = json.loads(contest.top_ten)
+        # user_list = [user[0] for user in contest_users]
+        top_ten_users = []
+        for u in contest_users:
+            try:
+                user_obj=User.objects.get(id=u[0])
+                user_obj.profile_rating = u[1]
+                user_obj.vote_count = u[2]
+                top_ten_users.append(user_obj)
+            except:
+                pass
+    else:
+        custom_attr = CustomAttributes.objects.filter(key='top_ten_min_votes')
+        vote_limit = 1
+        try:
+            vote_limit = int(custom_attr[0].val) if custom_attr else 1
+        except Exception, ex:
+            print ex
 
-    top_ten_users = User.objects.filter(is_approved=1, is_public=1, is_active=1, vote_count__gte=vote_limit
-                                                ).order_by('-vote_count').order_by('-profile_rating')[:10]
-    print top_ten_users.query
+        top_ten_users = User.objects.filter(is_approved=1, is_public=1, is_active=1, vote_count__gte=vote_limit
+                                                    ).order_by('-vote_count').order_by('-profile_rating')[:10]
 
     return top_ten_users
 
