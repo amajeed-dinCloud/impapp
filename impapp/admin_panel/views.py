@@ -14,13 +14,22 @@ from django.core.paginator import PageNotAnInteger
 import traceback
 from django.views.decorators.csrf import csrf_exempt
 from impapp.app import functions as app_func
+from django.db import connection
+from django.db.models import Count
 
 
 
 @login_required
 def dashboard(request):
-    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard'},
-                              context_instance=RequestContext(request))
+    active_users = User.objects.filter(is_active=1).count()
+    pending_users = User.objects.filter(is_approved=0).count()
+    total_users = User.objects.count()
+    g_data = get_graph_data()
+    print g_data
+    info_dict = {"active_users":active_users, "pending_users": pending_users, "total_users": total_users}
+
+    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard', 'info_dict': info_dict,
+                                                 'g_data':g_data}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -276,3 +285,28 @@ def pending_users(request):
         print traceback.print_exc(5)
 
 
+def get_graph_data():
+    keyword = 'day'
+    truncate_date = connection.ops.date_trunc_sql(keyword, 'created_on')
+    qs = User.objects.extra({keyword:truncate_date})
+    all_users = qs.values(keyword).annotate(Count('pk')).order_by(keyword)[:30]
+    android_users = qs.filter(agent='android').values(keyword).annotate(Count('pk')).order_by(keyword)[:30]
+    ios_users = qs.exclude(agent='android').values(keyword).annotate(Count('pk')).order_by(keyword)[:30]
+    data_set = []
+    for data in all_users:
+        inner_dict = {'count':data['pk__count'], keyword: str(data[keyword].strftime('%B %d, %y'))}
+        for and_user in android_users:
+            if data[keyword] == and_user[keyword]:
+                inner_dict['and_user'] = and_user['pk__count']
+                break
+        for iso_user in ios_users:
+            if data[keyword] == iso_user[keyword]:
+                inner_dict['ios_user'] = iso_user['pk__count']
+                break
+        if not inner_dict.get('ios_user'):
+            inner_dict['ios_user'] = 0
+        if not inner_dict.get('and_user'):
+            inner_dict['and_user'] = 0
+
+        data_set.append(inner_dict)
+    return data_set
