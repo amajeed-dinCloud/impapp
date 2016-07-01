@@ -20,14 +20,15 @@ from django.db.models import Count
 
 
 @login_required
-def dashboard(request):
+def dashboard(request, msg=''):
+    print msg
     active_users = User.objects.filter(is_active=1).count()
     pending_users = User.objects.filter(is_approved=0).count()
     total_users = User.objects.count()
     g_data = get_graph_data()
     info_dict = {"active_users":active_users, "pending_users": pending_users, "total_users": total_users}
 
-    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard', 'info_dict': info_dict,
+    return render_to_response('dashboard.html', {'request': request, 'menu': 'dashboard', 'info_dict': info_dict,"msg":msg,
                                                  'g_data':g_data}, context_instance=RequestContext(request))
 
 

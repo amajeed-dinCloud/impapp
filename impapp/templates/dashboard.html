@@ -10,6 +10,12 @@
         }
     }
     $(document).ready(function(){
+    if ('{{ msg }}'.length>1){
+    $("#info_div").show()
+    $("#para_info_div").text('{{ msg }}');
+}
+
+
         Morris.Area({
         element: 'morris-area-chart',
         data:[
@@ -18,7 +24,7 @@
             {% endfor %}],
         xkey: 'day',
         ykeys: ['count', 'ios_user', 'and_user'],
-        labels: ['count', 'ios', 'android'],
+        labels: ['Total Users', 'iOS Users', 'Android Users'],
         pointSize: 2,
         hideHover: 'auto',
         parseTime:false,

@@ -21,7 +21,9 @@ from django.contrib import admin
 from impapp.admin_panel.views import dashboard
 
 
+from django.contrib.auth import views as auth_views
 urlpatterns = [
+    url(r'^admin/password_change/done/$', dashboard,{"msg": "Password has been updated successfully. "}),
     url(r'^admin/', admin.site.urls),
     url(r'^service/',include('impapp.app.urls')),
     url(r'^panel/',include('impapp.admin_panel.urls')),
@@ -29,6 +31,7 @@ urlpatterns = [
     url(r'^redirect_insta',redirect_insta),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'admin/login.html'}),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+    url(r'^admin/password_change/done/$', dashboard),
     # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':  settings.STATIC_ROOT } ),
 
