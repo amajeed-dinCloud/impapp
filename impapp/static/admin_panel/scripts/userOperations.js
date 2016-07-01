@@ -77,3 +77,7 @@ function populate_images(user_id){
 
            });
 }
+
+function post_form(){
+      $("#form_update_user").submit()
+ }
