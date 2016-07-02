@@ -38,10 +38,10 @@ def all_users(request):
     try:
         query_str = ''
         parmas = request.get_full_path().split(request.path+'?')
-        if len(parmas)>1:
+        if len(parmas) > 1:
             query_str = parmas[1]
 
-        page_size = 2
+        page_size = 20
         all_user = User.objects.all()
         email = request.GET.get('email')
         name = request.GET.get('name')
