@@ -68,12 +68,20 @@ def all_users(request):
             all_user = all_user.filter(profile_rating__icontains=rating)
         if agent:
             all_user = all_user.filter(agent__icontains=agent)
-        if is_active:
-            all_user = all_user.filter(is_active=is_active)
-        if is_public:
-            all_user = all_user.filter(is_active=is_public)
-        if is_approved:
-            all_user = all_user.filter(is_active=is_approved)
+        if is_active == '1':
+            all_user = all_user.filter(is_active=1)
+        elif is_active == '0':
+            all_user = all_user.filter(is_active=0)
+
+        if is_public == '1':
+            all_user = all_user.filter(is_public=1)
+        elif is_public == '0':
+            all_user = all_user.filter(is_public=0)
+
+        if is_approved == '1':
+            all_user = all_user.filter(is_approved=1)
+        elif is_approved == '0':
+            all_user = all_user.filter(is_approved=0)
 
         if submit == "download_report":
             response = HttpResponse(content_type='text/csv')
