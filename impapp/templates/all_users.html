@@ -40,39 +40,39 @@
 <form class="form-horizontal">
     <div class="control-group inline">
       <div class="controls">
-        <input class="form-control" placeholder="Email" name="email" id="email">
+        <input class="form-control" placeholder="Email" name="email" id="email" value="{{ request.GET.email }}">
       </div>
     </div>
     <div class="control-group inline">
       <div class="controls">
-        <input class="form-control" placeholder="User Name" name="name" id="name">
-      </div>
-    </div>
-
-    <div class="control-group inline">
-      <div class="controls">
-        <input class="form-control" placeholder="City" name="city" id="city">
+        <input class="form-control" placeholder="User Name" name="name" id="name" value="{{ request.GET.name }}">
       </div>
     </div>
 
     <div class="control-group inline">
       <div class="controls">
-        <input type="number" class="form-control" placeholder="Age" name="age" id="age">
+        <input class="form-control" placeholder="City" name="city" id="city" value="{{ request.GET.city }}">
+      </div>
+    </div>
+
+    <div class="control-group inline">
+      <div class="controls">
+        <input type="number" class="form-control" placeholder="Age" name="age" id="age" value="{{ request.GET.age }}">
       </div>
     </div>
 
      <div class="control-group inline">
       <div class="controls">
-        <input type="number" class="form-control" placeholder="Rating" name="rating" id="rating">
+        <input type="number" class="form-control" placeholder="Rating" name="rating" id="rating" value="{{ request.GET.rating }}">
       </div>
     </div>
 
      <div class="control-group inline">
       <div class="controls">
         <select class="form-control" name="agent" style="width: 100%">
-                    <option value="all" selected>Both iOS & Android User</option>
-                    <option value="iOS">iOS Users</option>
-                    <option value="android">Android Users</option>
+                    <option value="" selected>Both iOS & Android User</option>
+                    <option value="iOS" {% if request.GET.agent == "iOS"  %}selected{% endif %}>iOS Users</option>
+                    <option value="android" {% if request.GET.agent == "android"  %}selected{% endif %}>Android Users</option>
         </select>
       </div>
     </div>
@@ -80,9 +80,9 @@
      <div class="control-group inline">
       <div class="controls">
         <select class="form-control" name="is_active" style="width: 100%">
-                    <option value="all" selected>Active & Inactive Users</option>
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
+                    <option value="" selected>Active & Inactive Users</option>
+                    <option value="1" {% if request.GET.is_active == "1"  %}selected{% endif %}>Active</option>
+                    <option value="0"{% if request.GET.is_active == "0"  %}selected{% endif %}>Inactive</option>
         </select>
       </div>
     </div>
@@ -90,9 +90,9 @@
      <div class="control-group inline">
       <div class="controls">
         <select class="form-control" name="is_public" style="width: 100%">
-                    <option value="all" selected>Public & Private Users</option>
-                    <option value="1">Public</option>
-                    <option value="0">Private</option>
+                    <option value="" selected>Public & Private Users</option>
+                    <option value="1"{% if request.GET.is_public == "1"  %}selected{% endif %}>Public</option>
+                    <option value="0" {% if request.GET.is_public == "0"  %}selected{% endif %}>Private</option>
         </select>
       </div>
     </div>
@@ -101,9 +101,9 @@
      <div class="control-group inline">
       <div class="controls">
         <select class="form-control" name="is_approved" style="width: 100%">
-                    <option value="all" selected>Approved & Pending Users</option>
-                    <option value="1">Approved</option>
-                    <option value="0">Pending</option>
+                    <option value="" selected>Approved & Pending Users</option>
+                    <option value="1" {% if request.GET.is_approved == "1"  %}selected{% endif %}>Approved</option>
+                    <option value="0" {% if request.GET.is_approved == "0"  %}selected{% endif %}>Pending</option>
         </select>
       </div>
     </div>
@@ -240,7 +240,7 @@
                 <ul class="pagination">
                 {% if all_user.has_previous %}
                 <li>
-                <span><a href="?page={{ all_user.previous_page_number }}&query_string={{ query_string }}{% for field in fields  %}&fields={{ fields }}{% endfor %}">Previous</a></span>
+                <span><a href="?{{ query_str }}&page={{ all_user.previous_page_number }}">Previous</a></span>
                 </li>
                 {% endif %}
                 <li class="">
@@ -248,7 +248,7 @@
                 </li>
                 {% if all_user.has_next %}
                 <li>
-                <span><a href="?page={{ all_user.next_page_number }}&query_string={{ query_string }}{% for field in fields  %}&fields={{ fields }}{% endfor %}">Next</a></span>
+                <span><a href="?{{ query_str }}&page={{ all_user.next_page_number }}">Next</a></span>
                 </li>
                 {% endif %}
                 </ul>

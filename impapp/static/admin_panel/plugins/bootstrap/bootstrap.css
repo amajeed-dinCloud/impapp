@@ -4952,6 +4952,7 @@ a.list-group-item-danger.active:focus {
 }
 .panel-default {
   border-color: #ddd;
+ /*background-color: rgba(245, 245, 245, 0);*/
 }
 .panel-default > .panel-heading {
   color: #333;

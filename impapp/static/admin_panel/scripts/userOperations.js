@@ -63,7 +63,7 @@ function populate_images(user_id){
         if(!$.isEmptyObject(data)){
                    $("#imgModalBody").empty();
                     for(d in data){
-                   $("#imgModalBody").append('<div class="col-xs-6"><div class="form-group"><img src="'+data[d].img_url+'" alt="User Images" style="width:240px;height:400px;"></div></div></div>')
+                   $("#imgModalBody").append('<div class="col-xs-4"><div class="form-group"><img src="'+data[d].img_url+'" alt="User Images" style="width:150px;height:250px;"></div></div></div>')
                     }
 
                }

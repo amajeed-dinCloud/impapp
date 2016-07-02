@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
+<!-- saved from url=(0082)file:///C:/Users/Abdul/PycharmProjects/impapp/impapp/static/admin_panel/blank.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootsrtap Free Admin Template - SIMINTA | Admin Dashboad Template</title>
+    <title>Admin Dashboad</title>
     <!-- Core CSS - Include with every page -->
     <link href="/static/admin_panel/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
     <link href="/static/admin_panel/font-awesome/css/font-awesome.css" rel="stylesheet" />
@@ -13,13 +11,17 @@
     <link href="/static/admin_panel/css/style.css" rel="stylesheet" />
     <link href="/static/admin_panel/css/main-style.css" rel="stylesheet" />
 
+
+</head>
+
+<body class=" pace-done">
+    <!-- Core Scripts - Include with every page -->
     <script src="/static/admin_panel/plugins/jquery-1.10.2.js"></script>
     <script src="/static/admin_panel/plugins/bootstrap/bootstrap.min.js"></script>
     <script src="/static/admin_panel/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="/static/admin_panel/plugins/pace/pace.js"></script>
     <script src="/static/admin_panel/scripts/siminta.js"></script>
 
-</head>
 <script type="text/javascript">
     $(document).ready(function(){
 
@@ -37,11 +39,18 @@
 
 </script>
 
-<body>
+
+
+<div class="pace  pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+  <div class="pace-progress-inner"></div>
+</div>
+
+<div class="pace-activity"></div></div>
     <!--  wrapper -->
     <div id="wrapper">
         <!-- navbar top -->
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar">
+        <!-- navbar top -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar">
             <!-- navbar-header -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
@@ -51,12 +60,14 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/">
-                    <img src="/static/admin_panel/imgs/logo.png" alt="" />
-                </a>
-                <a class="navbar-brand" href="/">
-                    <img src="/static/admin_panel/imgs/text_logo.png" alt="" />
+                    <img src="/static/admin_panel/imgs/logo.png" alt="LOGO">
                 </a>
             </div>
+
+        <div class="navbar-header col-md-2 col-md-offset-9">
+            <span>Server Time: {% now "SHORT_DATETIME_FORMAT" %}</span>
+        </div>
+
             <!-- end navbar-header -->
             <!-- navbar-top-links -->
             <ul class="nav navbar-top-links navbar-right">
@@ -67,12 +78,14 @@
                     </a>
                     <!-- dropdown user-->
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-clock-o fa-fw"></i>{% now "SHORT_DATETIME_FORMAT" %}</a></li>
-                        <li><a href="/admin/password_change/?next=/"><i class="fa fa-gear fa-fw"></i>Change Password</a></li>
                         <li class="divider"></li>
                         <li><a href="/admin/logout/?next=/"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
                         </li>
+                        <li class="divider"></li>
+                        <li><a href="/admin/password_change/?next=/"><i class="fa fa-sign-out fa-fw"></i>Change Password</a>
+                        </li>
                     </ul>
+
                     <!-- end dropdown-user -->
                 </li>
                 <!-- end main dropdown -->
@@ -80,7 +93,7 @@
             <!-- end navbar-top-links -->
 
         </nav>
-        <!-- end navbar top -->
+
 
         <!-- navbar side -->
         <nav class="navbar-default navbar-static-side" role="navigation">
@@ -96,7 +109,18 @@
                         </div>
                         <!--end user image section-->
                     </li>
-
+                    <li class="sidebar-search">
+                        <!-- search section-->
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Search User...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" id="search_user">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <!--end search section-->
+                    </li>
                     <li {% if menu == "dashboard" %}class="selected"{% endif %}>
                         <a href="/"><i class="fa fa-dashboard fa-fw"></i>Dashboard</a>
                     </li>
@@ -120,6 +144,7 @@
                     <li {% if menu == "refresh_ratings" %}class="selected"{% endif %}>
                         <a href="/panel/update_all_ratings"><i class="fa fa-question-circle fa-fw"></i>Refresh Ratings</a>
                     </li>
+
                 </ul>
                 <!-- end side-menu -->
             </div>
@@ -146,14 +171,8 @@
         {% block main_content %}
 
         {% endblock %}
-        <!-- end page-wrapper -->
-
     </div>
     <!-- end wrapper -->
 
-    <!-- Core Scripts - Include with every page -->
 
-
-</body>
-
-</html>
+</body></html>

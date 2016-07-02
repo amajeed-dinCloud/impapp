@@ -66,7 +66,7 @@ color: #FFFFFF;
 padding: 20px 15px;
 }
 #side-menu {
-    background-color:#447e9b;
+    background-color:#545454;
 }
 
  #side-menu a {
@@ -75,7 +75,7 @@ padding: 20px 15px;
            height: 55px;
         }
         .selected {
-            background-color:rgb(83, 163, 163);
+            background-color:rgb(146, 33, 105);
         }
 /* back colors */
         .blue {
@@ -98,7 +98,7 @@ padding: 20px 15px;
 /* tap nvbar Section */
 
 #navbar {
-    background-color:#447e9b;
+    background-color:#545454;
 }
 
 .navbar-brand {

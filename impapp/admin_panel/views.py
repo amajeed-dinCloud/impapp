@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from impapp.app import functions as app_func
 from django.db import connection
 from django.db.models import Count
-
+import csv
 
 
 
@@ -36,23 +36,63 @@ def dashboard(request, msg=''):
 @login_required
 def all_users(request):
     try:
-        query_string = request.GET.get('query_string')
-        fields = request.GET.getlist('fields')
-        print request
-        argument_list = []
-        if query_string and fields:
-            for query in query_string.split(' '):
-                for field in fields:
-                    argument_list.append(Q(**{field+'__icontains': query}))
+        query_str = ''
+        parmas = request.get_full_path().split(request.path+'?')
+        if len(parmas)>1:
+            query_str = parmas[1]
 
+        page_size = 2
         all_user = User.objects.all()
-        if query_string and fields:
-            all_user = all_user.filter( reduce(operator.or_, argument_list))
-            print all_user.query
-
-        page_size = 20
-        paginator = Paginator(all_user, page_size)
+        email = request.GET.get('email')
+        name = request.GET.get('name')
+        city = request.GET.get('city')
+        age = request.GET.get('age')
+        rating = request.GET.get('rating')
+        agent = request.GET.get('agent')
+        is_active = request.GET.get('is_active')
+        is_public = request.GET.get('is_public')
+        is_approved = request.GET.get('is_approved')
+        submit = request.GET.get('submit')
         page = request.GET.get('page')
+
+        if email:
+            all_user = all_user.filter(email__icontains=email)
+        if name:
+            print name
+            all_user = all_user.filter(name__icontains=name)
+        if city:
+            all_user = all_user.filter(city__icontains=city)
+        if age:
+            all_user = all_user.filter(age=age)
+        if rating:
+            all_user = all_user.filter(profile_rating__icontains=rating)
+        if agent:
+            all_user = all_user.filter(agent__icontains=agent)
+        if is_active:
+            all_user = all_user.filter(is_active=is_active)
+        if is_public:
+            all_user = all_user.filter(is_active=is_public)
+        if is_approved:
+            all_user = all_user.filter(is_active=is_approved)
+
+        if submit == "download_report":
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="user_info.csv"'
+            writer = csv.writer(response)
+
+            if all_user:
+                header = ['Name', 'City', 'Age', 'Email', 'Rating', 'IS Approved', 'Is Public', 'Is Active',
+                          'User Agent', 'Vote Count', "Created On", "Updated On"]
+                writer.writerow(header)
+                for u in all_user:
+                    user_tuple = (u.name, u.city, u.age, u.email, u.profile_rating, u.is_approved, u.is_public,
+                                  u.is_active, u.agent, u.vote_count,u.created_on, u.updated_on)
+                    writer.writerow(user_tuple)
+                return response
+
+
+        paginator = Paginator(all_user, page_size)
+
         try:
             all_user = paginator.page(page)
         except PageNotAnInteger:
@@ -65,8 +105,8 @@ def all_users(request):
                             'is_public': 'Is Public', 'is_active': 'Is Active'}
 
         return render_to_response('all_users.html', {'request': request, 'menu': 'all_users', 'all_user': all_user,
-                                                     'selection_fields': selection_fields, "page_size": page_size ,
-                                                     "query_string": query_string,"fields": fields },
+                                                     'selection_fields': selection_fields, "page_size": page_size,
+                                                     "query_str": query_str},
                                   context_instance=RequestContext(request))
     except Exception, ex:
         print traceback.print_exc(5)
