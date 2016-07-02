@@ -351,3 +351,33 @@ def get_graph_data():
 
         data_set.append(inner_dict)
     return data_set
+
+
+def get_contest_users(request):
+    out_str = ''
+    try:
+        contest_id = request.GET.get("contest_id")
+        cong_obj = Contests.objects.get(pk=contest_id)
+        contest_users = json.loads(cong_obj.top_ten)
+        top_ten_users = []
+        for u in contest_users:
+                try:
+                    user_obj=User.objects.get(id=u[0])
+                    user_obj.profile_rating = u[1]
+                    user_obj.vote_count = u[2]
+                    top_ten_users.append(user_obj)
+                except Exception,ex:
+                    print ex
+        if top_ten_users:
+            out_str = '<table class="table table-striped table-bordered table-hover"><tr><th>Name</th>' \
+                      '<th>Email</th><th>Age</th><th>City</th><th>Rating</th><th>Agent</th></tr></table>'
+            for u in top_ten_users:
+                email = '' if not u.email else u.email
+                out_str=out_str.replace('</table>', '<tr><td>'+str(u.name)+'</td><td>'+str(email)+'</td><td>'+str(u.age)
+                                        +'</td><td>'+str(u.city)+'</td><td>'+str(u.profile_rating)+'</td><td>'+str(u.agent)+'</td></tr></table>')
+
+    except Exception, ex:
+        print traceback.print_exc(5)
+        out_str=str(ex)
+
+    return HttpResponse(out_str)

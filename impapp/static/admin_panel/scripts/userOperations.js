@@ -78,6 +78,18 @@ function populate_images(user_id){
            });
 }
 
+
+function populate_users(contest_id){
+    $.get( "/panel/get_contest_users?contest_id="+contest_id, function( data ) {
+        $("#userModalBody").empty();
+        $("#userModalBody").append(data)
+    });
+
+}
+
+
+
+
 function post_form(){
       $("#form_update_user").submit()
  }

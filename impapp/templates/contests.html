@@ -89,48 +89,24 @@
                                         <td>{{ con.end_date }}</td>
                                         <td>{{ con.created_on }}</td>
                                         <td colspan="2">
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"data-target="#imgModal" onclick='populate_images("{{ user_obj.id }}");'>View Users</button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"data-target="#userModal" onclick="populate_users({{ con.id }});">View Users</button>
                                     </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
-                        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h4 class="modal-title" id="myModalLabel">Edit User</h4>
-                                        </div>
 
-                                    <form role="form" method="post" action="/panel/update_user" id="form_update_user">
-                                        {% csrf_token %}
-                                        <div class="modal-body" id="editModalBody">
-
-
-                                            </div>
-
-                                        <div class="modal-footer" id="editModalFooter">
-
-                                            </div>
-
-                                    </form>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal fade" id="imgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                            <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content col-lg-12">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h4 class="modal-title" id="myModalLabel">User Images</h4>
+                                            <h4 class="modal-title" id="myModalLabel">Contest Users</h4>
                                         </div>
 
                                         {% csrf_token %}
-                                        <div class="modal-body" id="imgModalBody">
-                                            <div class="container" id="imgsDiv">
+                                        <div class="modal-body" id="userModalBody">
+                                            <div class="container" id="usersDiv">
 
                                         </div>
 

@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^del_attribute', del_attribute),
     url(r'^get_attrib', get_attrib),
     url(r'^get_images', get_images),
+    url(r'^get_contest_users', get_contest_users),
 
 
 ]
