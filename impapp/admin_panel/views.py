@@ -376,6 +376,9 @@ def get_contest_users(request):
                 out_str=out_str.replace('</table>', '<tr><td>'+str(u.name)+'</td><td>'+str(email)+'</td><td>'+str(u.age)
                                         +'</td><td>'+str(u.city)+'</td><td>'+str(u.profile_rating)+'</td><td>'+str(u.agent)+'</td></tr></table>')
 
+        else:
+            out_str = "<h3>No user has been found in this contest.<h3>"
+
     except Exception, ex:
         print traceback.print_exc(5)
         out_str=str(ex)
