@@ -58,7 +58,6 @@ def all_users(request):
         if email:
             all_user = all_user.filter(email__icontains=email)
         if name:
-            print name
             all_user = all_user.filter(name__icontains=name)
         if city:
             all_user = all_user.filter(city__icontains=city)
@@ -319,16 +318,72 @@ def pending_users(request):
     try:
         msg = ''
         msg_type = ''
-        if request.method=="POST":
+        if request.method == "POST":
             user_ids = request.POST.getlist('user_id')
             if not user_ids:
                 msg = "No user has been selected"
             else:
                 User.objects.filter(id__in=user_ids).update(is_approved=1)
                 msg = "User(s) have been updated."
-        all_users = User.objects.filter(is_approved=0).order_by('-created_on')
+
+        email = request.GET.get('email')
+        name = request.GET.get('name')
+        city = request.GET.get('city')
+        age = request.GET.get('age')
+        rating = request.GET.get('rating')
+        agent = request.GET.get('agent')
+        is_active = request.GET.get('is_active')
+        is_public = request.GET.get('is_public')
+        is_approved = request.GET.get('is_approved')
+        submit = request.GET.get('submit')
+
+
+        all_user = User.objects.filter(is_approved=0).order_by('-created_on')
+        if email:
+            all_user = all_user.filter(email__icontains=email)
+        if name:
+            all_user = all_user.filter(name__icontains=name)
+        if city:
+            all_user = all_user.filter(city__icontains=city)
+        if age:
+            all_user = all_user.filter(age=age)
+        if rating:
+            all_user = all_user.filter(profile_rating__icontains=rating)
+        if agent:
+            all_user = all_user.filter(agent__icontains=agent)
+        if is_active == '1':
+            all_user = all_user.filter(is_active=1)
+        elif is_active == '0':
+            all_user = all_user.filter(is_active=0)
+
+        if is_public == '1':
+            all_user = all_user.filter(is_public=1)
+        elif is_public == '0':
+            all_user = all_user.filter(is_public=0)
+
+        if is_approved == '1':
+            all_user = all_user.filter(is_approved=1)
+        elif is_approved == '0':
+            all_user = all_user.filter(is_approved=0)
+
+        if submit == "download_report":
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="pending_users_info.csv"'
+            writer = csv.writer(response)
+
+            if all_user:
+                header = ['Name', 'City', 'Age', 'Email', 'Rating', 'IS Approved', 'Is Public', 'Is Active',
+                          'User Agent', 'Vote Count', "Created On", "Updated On"]
+                writer.writerow(header)
+                for u in all_user:
+                    user_tuple = (u.name, u.city, u.age, u.email, u.profile_rating, u.is_approved, u.is_public,
+                                  u.is_active, u.agent, u.vote_count,u.created_on, u.updated_on)
+                    writer.writerow(user_tuple)
+                return response
+
+
         return render_to_response('pending_users.html', {'request': request, 'menu': 'pending_users',
-                                                             'all_users': all_users,"msg":msg,'msg_type': msg_type},
+                                                             'all_users': all_user,"msg":msg,'msg_type': msg_type},
                                   context_instance=RequestContext(request))
     except:
         print traceback.print_exc(5)

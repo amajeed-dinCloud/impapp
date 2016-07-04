@@ -109,6 +109,22 @@ def login(request):
     return HttpResponse(json.dumps(out_dict))
 
 
+
+@csrf_exempt
+def get_users(request):
+    out_dict = {"code": 500, "status": "error", "message": ""}
+    try:
+        users = User.objects.all().values('id', 'email', 'fb_id', 'ins_id')
+        print users
+        out_dict = {"code": 200, "status": "ok", 'users': list(users)}
+    except Exception, ex:
+        out_dict["message"] = str(ex)
+
+    return HttpResponse(json.dumps(out_dict))
+
+
+
+
 @csrf_exempt
 def update_profile(request):
     out_dict = {"code": 500, "status": "error", "message": ""}
@@ -308,11 +324,16 @@ def delete_user(request):
             email = request.POST.get('email')
             fb_id = request.POST.get('fb_id')
             ins_id = request.POST.get('ins_id')
-            if not email and not ins_id and not fb_id:
+            user_id = request.POST.get('user_id')
+            if not email and not ins_id and not fb_id and not user_id:
                 out_dict["message"] = "Email, fb_id or ins_id is missing."
 
             else:
                 user_obj = is_user_exists(email, fb_id, ins_id)
+                if not user_obj and user_id:
+                    user_obj = User.objects.filter(id=user_id)
+                    if user_obj:
+                        user_obj = user_obj[0]
                 if not user_obj:
                     out_dict["message"] = "User not found."
                 else:

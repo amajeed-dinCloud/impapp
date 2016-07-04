@@ -63,8 +63,116 @@ form.submit();
                     <h1 class="page-header">Pending Users</h1>
 
                 </div>
+
+            </div>
+
+            <div class="row">
+
+        <div class="panel panel-default">
+         <div class="panel-heading">
+                        <b>Data Filter</b>
+         </div>
+
+         <div class="panel-body">
+
+
+
+<form class="form-horizontal">
+    <div class="control-group inline">
+      <div class="controls">
+        <input class="form-control" placeholder="Email" name="email" id="email" value="{{ request.GET.email }}">
+      </div>
+    </div>
+    <div class="control-group inline">
+      <div class="controls">
+        <input class="form-control" placeholder="User Name" name="name" id="name" value="{{ request.GET.name }}">
+      </div>
+    </div>
+
+    <div class="control-group inline">
+      <div class="controls">
+        <input class="form-control" placeholder="City" name="city" id="city" value="{{ request.GET.city }}">
+      </div>
+    </div>
+
+    <div class="control-group inline">
+      <div class="controls">
+        <input type="number" class="form-control" placeholder="Age" name="age" id="age" value="{{ request.GET.age }}">
+      </div>
+    </div>
+
+     <div class="control-group inline">
+      <div class="controls">
+        <input type="number" class="form-control" placeholder="Rating" name="rating" id="rating" value="{{ request.GET.rating }}">
+      </div>
+    </div>
+
+     <div class="control-group inline">
+      <div class="controls">
+        <select class="form-control" name="agent" style="width: 100%">
+                    <option value="" selected>Both iOS & Android User</option>
+                    <option value="iOS" {% if request.GET.agent == "iOS"  %}selected{% endif %}>iOS Users</option>
+                    <option value="android" {% if request.GET.agent == "android"  %}selected{% endif %}>Android Users</option>
+        </select>
+      </div>
+    </div>
+
+     <div class="control-group inline">
+      <div class="controls">
+        <select class="form-control" name="is_active" style="width: 100%">
+                    <option value="" selected>Active & Inactive Users</option>
+                    <option value="1" {% if request.GET.is_active == "1"  %}selected{% endif %}>Active</option>
+                    <option value="0"{% if request.GET.is_active == "0"  %}selected{% endif %}>Inactive</option>
+        </select>
+      </div>
+    </div>
+
+     <div class="control-group inline">
+      <div class="controls">
+        <select class="form-control" name="is_public" style="width: 100%">
+                    <option value="" selected>Public & Private Users</option>
+                    <option value="1"{% if request.GET.is_public == "1"  %}selected{% endif %}>Public</option>
+                    <option value="0" {% if request.GET.is_public == "0"  %}selected{% endif %}>Private</option>
+        </select>
+      </div>
+    </div>
+
+
+     <div class="control-group inline">
+      <div class="controls">
+        <select class="form-control" name="is_approved" style="width: 100%">
+                    <option value="" selected>Approved & Pending Users</option>
+                    <option value="1" {% if request.GET.is_approved == "1"  %}selected{% endif %}>Approved</option>
+                    <option value="0" {% if request.GET.is_approved == "0"  %}selected{% endif %}>Pending</option>
+        </select>
+      </div>
+    </div>
+
+         <div class="control-group inline">
+      <div class="controls">
+        <button type="submit" name="submit" class="btn btn-primary" value="filter_data">Filter Data</button>
+        <button type="submit" name="submit" class="btn btn-primary" value="download_report">Download Report</button>
+      </div>
+    </div>
+  </form>
+
+        </div>
+
+
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+        <div class="row">
                 <!--End Page Header -->
-                <div class="col-lg-12">
                      <!--    Context Classes  -->
                     <div class="panel panel-default">
 
@@ -83,6 +191,7 @@ form.submit();
                                             <th>Age</th>
                                             <th>Email</th>
                                             <th>Rating</th>
+                                            <th>Votes</th>
                                             <th>Is Approved</th>
                                             <th>Is Public</th>
                                             <th>Is Active</th>
@@ -102,6 +211,7 @@ form.submit();
                                         <td>{{ user_obj.age }}</td>
                                         <td>{{ user_obj.email }}</td>
                                         <td>{{ user_obj.profile_rating }}</td>
+                                        <td>{{ user_obj.vote_count }}</td>
                                         <td>{{ user_obj.is_approved }}</td>
                                         <td>{{ user_obj.is_public }}</td>
                                         <td>{{ user_obj.is_active }}</td>
@@ -172,7 +282,7 @@ form.submit();
                     </div>
                     <!--  end  Context Classes  -->
                 </div>
-            </div>
+
 
 
 

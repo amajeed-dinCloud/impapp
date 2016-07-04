@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url
 from impapp.app.views import *
-# from django.contrib import admin
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^sign_up', sign_up),
@@ -24,6 +23,7 @@ urlpatterns = [
     url(r'^upload_image', upload_image),
     url(r'^update_profile_image', update_profile_image),
     url(r'^delete_user_image', delete_user_image),
+    url(r'^get_users', get_users),
     url(r'^rate_user', rate_user),
     url(r'^delete_user', delete_user),
     url(r'^profiles_list', profiles_list),
@@ -35,4 +35,5 @@ urlpatterns = [
 
 
 ]
+# from django.contrib import admin
 
