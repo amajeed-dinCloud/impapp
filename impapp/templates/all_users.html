@@ -157,7 +157,7 @@
                                         <th>User Agent</th>
                                         <th>Created On</th>
                                         <th>Updated On</th>
-                                        <th colspan="2">Actions</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -176,10 +176,10 @@
                                     <td>{{ user_obj.agent }}</td>
                                     <td>{{ user_obj.created_on }}</td>
                                     <td>{{ user_obj.updated_on }}</td>
-                                    <td colspan="2"><button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                    <td><button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                             data-target="#editModal" onclick='populate_modal("{{ user_obj.id }}","{{ request.path }}");'>Edit</button>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"data-target="#imgModal" onclick='populate_images("{{ user_obj.id }}");'>View Images</button>
-                                    <button type="button" class="btn btn-warning btn-sm" onclick='delete_ratings("{{ user_obj.id }}","{{ request.path }}");'>Delete Ratings</button>
+{#                                    <button type="button" class="btn btn-warning btn-sm" onclick='delete_ratings("{{ user_obj.id }}","{{ request.path }}");'>Delete Ratings</button>#}
                                     <button type="button" class="btn btn-danger btn-sm" onclick='delete_user("{{ user_obj.id }}","{{ request.path }}");'>Delete</button></td>
 
                                 </tr>
