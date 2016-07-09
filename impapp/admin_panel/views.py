@@ -341,7 +341,7 @@ def pending_users(request):
         agent = request.GET.get('agent')
         is_active = request.GET.get('is_active')
         is_public = request.GET.get('is_public')
-        is_approved = request.GET.get('is_approved')
+        # is_approved = request.GET.get('is_approved')
         submit = request.GET.get('submit')
 
 
@@ -368,10 +368,10 @@ def pending_users(request):
         elif is_public == '0':
             all_user = all_user.filter(is_public=0)
 
-        if is_approved == '1':
-            all_user = all_user.filter(is_approved=1)
-        elif is_approved == '0':
-            all_user = all_user.filter(is_approved=0)
+        # if is_approved == '1':
+        #     all_user = all_user.filter(is_approved=1)
+        # elif is_approved == '0':
+        #     all_user = all_user.filter(is_approved=0)
 
         if submit == "download_report":
             response = HttpResponse(content_type='text/csv')
