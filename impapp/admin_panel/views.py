@@ -219,6 +219,7 @@ def update_user(request):
         city = request.POST.get('city')
         age = request.POST.get('age')
         password = request.POST.get('password')
+        profile_rating = request.POST.get('profile_rating')
 
         is_active = request.POST.get('is_active')
         is_active = 1 if is_active else 0
@@ -230,7 +231,13 @@ def update_user(request):
         is_approved = 1 if is_approved else 0
 
         user_obj = User.objects.get(id=user_id)
-        user_obj.name=name
+
+        if profile_rating and profile_rating != user_obj.profile_rating:
+            if util_functions.validate_float(profile_rating):
+                user_obj.profile_rating = profile_rating
+                Ratings.objects.filter(rated_profile=user_obj).update(rating=profile_rating)
+
+        user_obj.name = name
         user_obj.city = city
         if util_functions.validate_age(age):
             user_obj.age = age

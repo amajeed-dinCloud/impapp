@@ -25,7 +25,7 @@ function populate_modal(user_id,redirect_url){
                    '<div class="form-group"><label>City</label><input class="form-control" placeholder="Enter City" name="city" value='+data.city+'></div>' +
                    '<div class="form-group"><label>Age</label><input type="number" class="form-control" placeholder="Enter Age" name="age" value='+data.age+' min="18" max="100"></div>' +
                    '<div class="form-group"><label>Password</label><input class="form-control" placeholder="Enter Password" name="password" value='+data.password+'></div>' +
-                   '<div class="form-group"><label>Profile Rating</label><p class="form-control-static" id="rating">'+data.profile_rating+'</p></div>' +
+                   '<div class="form-group"><label>Profile Rating</label><input min="0" max="5" type="number" step="0.1" class="form-control" id="profile_rating" name="profile_rating" value='+data.profile_rating+'></div>' +
                    '<div class="form-group"><label>Email</label><p class="form-control-static" id="email">'+data.email+'</p></div>' +
                    '<div class="form-group"><div class="checkbox"><label><input type="checkbox" id="is_approved" name="is_approved">Is Approved</label></div>' +
                    '<div class="checkbox"><label><input type="checkbox" id="is_public" name="is_public">Is Public</label></div>' +

@@ -17,8 +17,9 @@ def update_profile_image_internal(user_obj, img_id):
 
 
 def make_user_response(user_obj, hide_pass=None):
+    rating =0.0 if not user_obj.profile_rating else user_obj.profile_rating
     user_dict = {"name": user_obj.name, "age": user_obj.age, "city": user_obj.city, "fb_id": user_obj.fb_id,
-                 "profile_rating": user_obj.profile_rating, "is_public": True if user_obj.is_public else False, "email": user_obj.email,
+                 "profile_rating": rating, "is_public": True if user_obj.is_public else False, "email": user_obj.email,
                  "user_images": make_user_images(user_obj), "ins_id": user_obj.ins_id, "password": user_obj.password,
                  "id": user_obj.id, "is_active": True if user_obj.is_active else False,
                  "is_approved": True if user_obj.is_approved else False}
