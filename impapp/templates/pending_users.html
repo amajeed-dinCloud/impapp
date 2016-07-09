@@ -28,7 +28,7 @@ if ('{{ msg }}'.length>1){
 
 })
 
-function post_form(path) {
+function post_approve_form(path) {
     if (confirm("Are you sure you want to approve selected users")){
 var form = $('<form></form>');
 
@@ -199,7 +199,7 @@ form.submit();
                                             <th>Created On</th>
                                             <th>Updated On</th>
                                             <th><label class="checkbox-inline"><input type="checkbox" id="check_all">Approve</label></td></th>
-                                            <th colspan="2">Actions <button type="button" class="btn btn-primary btn-sm" onclick="post_form('/panel/pending_users')">Approve Selected</button></th>
+                                            <th colspan="2">Actions <button type="button" class="btn btn-primary btn-sm" onclick="post_approve_form('/panel/pending_users')">Approve Selected</button></th>
                                         </tr>
                                     </thead>
                                     <tbody>
